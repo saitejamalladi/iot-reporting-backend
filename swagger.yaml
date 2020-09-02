@@ -1,0 +1,106 @@
+swagger: "2.0"
+
+info:
+  version: 1.0.0
+  title: Madhurams APIs
+  description: The Madhuram API document is intended strictly for internal use only.
+
+schemes:
+  - http
+host: 34.126.111.208:8080
+basePath: "/api"
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+  basicAuth:
+    type: basic
+
+tags:
+  - name: "auth"
+    description: "Token generation"
+  - name: "user"
+    description: "Access to user information"
+  - name: "order"
+    description: "Everything about meetings"
+  - name: "product"
+    description: "Everything about chats"
+  - name: "customer"
+    description: "Everything about groups"
+  - name: "payment"
+    description: "APIS to perform CRUD on payments "
+  - name: "terms"
+    description: "To get the terms and conditions"
+
+paths:
+  /auth/token:
+    post:
+      security:
+        - basicAuth: []
+      tags:
+        - "auth"
+      summary: To generate an auth token.
+      description: This API generated the auth token based on client ID, client Secret, user id and app key shared.
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "user object that needs to be shared to generate the token."
+          required: true
+          schema:
+            $ref: "#/definitions/Auth"
+      responses:
+        200:
+          description: The generated jwt token.
+          schema:
+            type: object
+            properties:
+              is_error:
+                type: boolean
+              status_code:
+                type: integer
+              display_msg:
+                type: string
+              res_data:
+                type: object
+                properties:
+                  token:
+                    type: string
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericErrorResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericErrorResponse"
+
+definitions:
+  Auth:
+    type: object
+    required:
+      - user_id
+      - password
+    properties:
+      user_id:
+        type: string
+        example: ajdfhky12o83uwkjhfi
+        description: user id of the user.
+      password:
+        type: string
+        example: ajdfhky12o83uwkjhfi
+        description:  password of the user.
+    xml:
+      name: "Auth"
+  GenericErrorResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+    xml:
+      name: "Auth"
