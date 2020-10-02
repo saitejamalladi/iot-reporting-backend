@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middlewares/auth');
-const userMiddleware = require('../middlewares/users');
+const authMiddleware = require('./middlewares/auth');
 const authController = require('../controllers/auth');
 const constants = require('../constants');
 
 router.post(
   '/token',
   authMiddleware.verifyBasicAuthentication,
-  authMiddleware.validate(constants.AUTH.TOKEN),
+  authMiddleware.validate(constants.AUTH.GENERATE_TOKEN),
   authController.generateToken
 );
 module.exports = router;

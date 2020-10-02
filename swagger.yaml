@@ -70,11 +70,40 @@ paths:
         400:
           description: Something wrong in the body.
           schema:
-            $ref: "#/definitions/GenericErrorResponse"
+            $ref: "#/definitions/GenericResponse"
         401:
           description: Invalid credentials
           schema:
-            $ref: "#/definitions/GenericErrorResponse"
+            $ref: "#/definitions/GenericResponse"
+
+  /user/create:
+    post:
+      security:
+        - basicAuth: []
+      tags:
+        - "user"
+      summary: To create the user
+      description: This API create the user
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "user object that needs to be created"
+          required: true
+          schema:
+            $ref: "#/definitions/CreateUser"
+      responses:
+        200:
+          description: The generated jwt token.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
 
 definitions:
   Auth:
@@ -93,7 +122,7 @@ definitions:
         description:  password of the user.
     xml:
       name: "Auth"
-  GenericErrorResponse:
+  GenericResponse:
     type: object
     properties:
       is_error:
@@ -103,4 +132,38 @@ definitions:
       display_msg:
         type: string
     xml:
-      name: "Auth"
+      name: "GenericResponse"
+  CreateUser:
+    type: object
+    require:
+      - name
+      - email
+      - phone_number
+      - country_code
+      - timezone
+      - password
+      - confirm_password
+    properties:
+      name:
+        type: string
+        example: John Doe
+      email:
+        type: string
+        example: john@jon.com
+      phone_number:
+        type: number
+        example: 9876543210
+      country_code:
+        type: number
+        example: 91
+      timezone:
+        type: string
+        example: Asia/Kolkata
+      password:
+        type: string
+        example: Dream@123123
+      confirm_password:
+        type: string
+        example: Dream@123123
+    xml:
+      name: "CreateUser"
