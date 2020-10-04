@@ -343,7 +343,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `madhuram`.`categories` ;
 
 CREATE TABLE IF NOT EXISTS `madhuram`.`categories` (
-  `id` BIGINT(20) NOT NULL,
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -387,7 +387,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `madhuram`.`product_details` ;
 
 CREATE TABLE IF NOT EXISTS `madhuram`.`product_details` (
-  `id` BIGINT(20) NOT NULL,
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `quantity` INT NOT NULL DEFAULT 1000,
   `listing_price` DECIMAL(8,2) NOT NULL,
   `sale_price` DECIMAL(8,2) NOT NULL,

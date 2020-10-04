@@ -1,0 +1,7 @@
+module.exports = {
+	CREATE: "CREATE",
+	FETCH: "FETCH",
+	UPDATE: "UPDATE",
+	REMOVE: "REMOVE",
+	GENERATE_TOKEN: "GENERATE_TOKEN"
+};

@@ -11,7 +11,7 @@ class UserController {
 				return;
 			}
 			let responseData = await userService.createCustomer(req.body);
-			res.status(200).json(response.handleSuccessResponseWithData("Registration Successful", responseData));
+			res.status(200).json(response.handleSuccessResponseWithData("Registration successful", responseData));
 		} catch(err) {
 			return next(err)
 		}

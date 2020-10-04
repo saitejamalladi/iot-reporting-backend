@@ -25,8 +25,10 @@ tags:
     description: "Access to user information"
   - name: "order"
     description: "Everything about meetings"
-  - name: "product"
-    description: "Everything about chats"
+  - name: "products"
+    description: "Everything about products"
+  - name: "categories"
+    description: "Everything about categories"
   - name: "customer"
     description: "Everything about groups"
   - name: "payment"
@@ -104,8 +106,139 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
-
+  /categories/create:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - "categories"
+      summary: To create a category
+      description: Create a category
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Category that needs to be created"
+          required: true
+          schema:
+            $ref: "#/definitions/CreateCategoryRequest"
+      responses:
+        200:
+          description: Category created successfully
+          schema:
+            $ref: "#/definitions/CreateCategoryResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /categories/list:
+    get:
+      tags:
+        - "categories"
+      summary: To list the categories
+      responses:
+        200:
+          description: Category List
+          schema:
+            $ref: "#/definitions/ListCategoryResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /categories/update:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - "categories"
+      summary: To update the existing category
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateCategoryRequest"
+      responses:
+        200:
+          description: Category updated successfully
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /categories/{id}:
+    get:
+      tags:
+        - "categories"
+      summary: To get a category based on id
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "The category_id to be fetched"
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Category fetched
+          schema:
+            $ref: "#/definitions/GetCategoryResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - "categories"
+      summary: To delete a category based on id
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "The category_id to be fetched"
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Category removed
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
 definitions:
+  GenericResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+    xml:
+      name: "GenericResponse"
   Auth:
     type: object
     required:
@@ -122,17 +255,6 @@ definitions:
         description:  password of the user.
     xml:
       name: "Auth"
-  GenericResponse:
-    type: object
-    properties:
-      is_error:
-        type: boolean
-      status_code:
-        type: integer
-      display_msg:
-        type: string
-    xml:
-      name: "GenericResponse"
   CreateUser:
     type: object
     require:
@@ -167,3 +289,73 @@ definitions:
         example: Dream@123123
     xml:
       name: "CreateUser"
+  CreateCategoryRequest:
+    type: object
+    properties:
+      name:
+        type: string
+    xml:
+      name: "CreateCategoryRequest"
+  CreateCategoryResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          id:
+            type: integer
+    xml:
+      name: "CreateCategoryResponse"
+  ListCategoryResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+    xml:
+      name: "ListCategoryResponse"
+  GetCategoryResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
+    xml:
+      name: "GetCategoryResponse"
+  UpdateCategoryRequest:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    xml:
+      name: "UpdateCategoryRequest"

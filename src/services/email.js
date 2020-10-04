@@ -26,11 +26,11 @@ class EmailService {
 	}
 	async sendWelcomeEmail (user) {
 		let text = "Welcome, " + user.name + "!\n\nWelcome to madhurams. Order your favourite sweets..";
-		await this.sendEmail(user.email, "Registration Successful", text, "teja.malladi457@gmail.com", "");
+		await this.sendEmail(user.email, "Registration successful", text, "teja.malladi457@gmail.com", "");
 	}
 	async sendInvitationEmail (user, tempPassword) {
 		let text = "Hi " + user.name + ", \n\nWe invite you to madhurams. Please use the below credentials to login. \n\nThanks. user_id: " + user['email'] + "\n Password: " + tempPassword + "\n\n Thanks";
-		await this.sendEmail(user.email, "Registration Successful", text, "teja.malladi457@gmail.com", "");
+		await this.sendEmail(user.email, "Registration successful", text, "teja.malladi457@gmail.com", "");
 	}
 }
 

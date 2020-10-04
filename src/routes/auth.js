@@ -7,7 +7,7 @@ const constants = require('../constants');
 router.post(
   '/token',
   authMiddleware.verifyBasicAuthentication,
-  authMiddleware.validate(constants.AUTH.GENERATE_TOKEN),
+  authMiddleware.validate(constants.VALIDATIONS.GENERATE_TOKEN),
   authController.generateToken
 );
 module.exports = router;

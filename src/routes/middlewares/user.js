@@ -5,7 +5,7 @@ const constants = require('../../constants');
 class UserMiddleware {
 	validate(method) {
 		switch (method) {
-			case constants.USER.CREATE: {
+			case constants.VALIDATIONS.CREATE: {
 				return [
 					check('name', 'Missing name').exists(),
 					check('email', 'Missing email').exists(),

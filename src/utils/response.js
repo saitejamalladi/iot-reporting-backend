@@ -6,6 +6,14 @@ class Response {
       "display_msg": errorMessage,
     };
   };
+  handleBadRequestWithData (errorMessage, responseData) {
+    return {
+      "is_error": true,
+      "status_code": 400,
+      "display_msg": errorMessage,
+      "res_data": responseData
+    };
+  };
   handleRequestTooLargeRequest (errorMessage)  {
     return {
       "is_error": true,
@@ -52,8 +60,15 @@ class Response {
   handleValidationError (errorArray) {
     return {
       "is_error": true,
-      "status_code": 404,
+      "status_code": 400,
       "display_msg": errorArray[0]['msg'] + " in " + errorArray[0]['location']
+    }
+  };
+  handleInternalServerError (errorMessage) {
+    return {
+      "is_error": true,
+      "status_code": 500,
+      "display_msg": errorMessage
     }
   };
 }

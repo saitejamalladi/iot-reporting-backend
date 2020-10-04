@@ -5,16 +5,17 @@ const userMiddleware = require('./middlewares/user');
 const userController = require('../controllers/user');
 const constants = require('../constants');
 
+let grantedRoles = [constants.ROLES.ADMIN];
 router.post(
 	'/create',
 	authMiddleware.verifyBasicAuthentication,
-	userMiddleware.validate(constants.USER.CREATE),
+	userMiddleware.validate(constants.VALIDATIONS.CREATE),
 	userController.createCustomer
 );
 router.post(
 	'/create/staff',
-	authMiddleware.verifyBearerToken,
-	userMiddleware.validate(constants.USER.CREATE),
+	(req, res, next) => authMiddleware.verifyToken([constants.ROLES.ADMIN], req, res, next),
+	userMiddleware.validate(constants.VALIDATIONS.CREATE),
 	userController.createSalesStaff
 );
 module.exports = router;

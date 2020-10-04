@@ -23,7 +23,7 @@ class AuthService {
 				let payload = {};
 				payload[constants.USER_ID] = userId;
 				payload[constants.USER_ROLE] = userDetails['role'].toUpperCase();
-				let token = jwt.sign(payload, config.jwt.secret, {expiresIn: '10m'});
+				let token = jwt.sign(payload, config.jwt.secret, {expiresIn: '10d'});
 				let responseData = {
 					"token": token
 				};

@@ -1,12 +1,10 @@
-const auth = require('./auth');
 const roles = require('./roles');
-const user = require('./user');
+const validations = require('./validations');
 
 module.exports = {
 	BCRY_SALT_ROUNDS: 10,
 	USER_ID: "USER_ID",
 	USER_ROLE: "USER_ROLE",
-	AUTH: auth,
-	USER: user,
+	VALIDATIONS: validations,
 	ROLES: roles
 };

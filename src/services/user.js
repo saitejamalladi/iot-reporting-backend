@@ -9,12 +9,6 @@ const SALT_ROUNDS = constants.BCRY_SALT_ROUNDS;
 
 class UserService {
 	async createUserCredentials(userId, password, role) {
-		if(await UserCredentialsModel.exists({
-			where: {
-				user_id: userId,
-				is_deleted: false
-			}
-		}))
 		let encryptedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 		await UserCredentialsModel.create({
 			user_id: userId,
