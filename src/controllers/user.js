@@ -10,8 +10,8 @@ class UserController {
 				res.status(400).json(response.handleValidationError(errors.array()));
 				return;
 			}
-			let responseData = await userService.createCustomer(req.body);
-			res.status(200).json(response.handleSuccessResponseWithData("Registration successful", responseData));
+			let responseObj = await userService.createCustomer(req.body);
+			res.status(responseObj.status_code).json(responseObj);
 		} catch(err) {
 			return next(err)
 		}
@@ -23,8 +23,8 @@ class UserController {
 				res.status(400).json(response.handleValidationError(errors.array()));
 				return;
 			}
-			await userService.createSalesStaff(req.body);
-			res.status(200).json(response.handleSuccessResponse("Staff invitation Sent"));
+			let responseObj = await userService.createSalesStaff(req.body);
+			res.status(responseObj.status_code).json(responseObj);
 		} catch(err) {
 			return next(err)
 		}

@@ -9,16 +9,16 @@ class CategoriesController {
 			if (!errors.isEmpty()) {
 				return res.status(400).json(response.handleValidationError(errors.array()));
 			}
-			let response = await categoriesService.create(req.body['name']);
-			res.status(response.status_code).json(response);
+			let responseObj = await categoriesService.create(req.body['name']);
+			res.status(responseObj.status_code).json(responseObj);
 		} catch(err) {
 			return next(err)
 		}
 	}
 	async listCategory(req, res, next) {
 		try {
-			let response = await categoriesService.list();
-			res.status(response.status_code).json(response);
+			let responseObj = await categoriesService.list();
+			res.status(responseObj.status_code).json(responseObj);
 		} catch(err) {
 			return next(err)
 		}
@@ -29,8 +29,8 @@ class CategoriesController {
 			if (!errors.isEmpty()) {
 				return res.status(400).json(response.handleValidationError(errors.array()));
 			}
-			let response = await categoriesService.get(req.params['id']);
-			res.status(response.status_code).json(response);
+			let responseObj = await categoriesService.get(req.params['id']);
+			res.status(responseObj.status_code).json(responseObj);
 		} catch(err) {
 			return next(err)
 		}
@@ -41,8 +41,8 @@ class CategoriesController {
 			if (!errors.isEmpty()) {
 				return res.status(400).json(response.handleValidationError(errors.array()));
 			}
-			let response = await categoriesService.update(req.body);
-			res.status(response.status_code).json(response);
+			let responseObj = await categoriesService.update(req.body);
+			res.status(responseObj.status_code).json(responseObj);
 		} catch(err) {
 			return next(err)
 		}
@@ -53,8 +53,8 @@ class CategoriesController {
 			if (!errors.isEmpty()) {
 				return res.status(400).json(response.handleValidationError(errors.array()));
 			}
-			let response = await categoriesService.remove(req.params['id']);
-			res.status(response.status_code).json(response);
+			let responseObj = await categoriesService.remove(req.params['id']);
+			res.status(responseObj.status_code).json(responseObj);
 		} catch(err) {
 			return next(err)
 		}

@@ -13,6 +13,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: 1000
     },
+    measuring_units: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'grams'
+    },
     listing_price: {
       type: DataTypes.DECIMAL,
       allowNull: false

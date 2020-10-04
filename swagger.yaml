@@ -227,6 +227,257 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+  /products/create:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - "products"
+      summary: To create a product
+      description: Create a product
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Product that needs to be created"
+          required: true
+          schema:
+            $ref: "#/definitions/CreateProductRequest"
+      responses:
+        200:
+          description: Product created successfully
+          schema:
+            $ref: "#/definitions/CreateProductResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /products/list:
+    get:
+      tags:
+        - "products"
+      summary: To list the products
+      responses:
+        200:
+          description: Products List
+          schema:
+            $ref: "#/definitions/ListProductResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /products/update:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - "products"
+      summary: To update the existing product
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateProductRequest"
+      responses:
+        200:
+          description: Category updated successfully
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /products/{product_id}:
+    get:
+      tags:
+        - "products"
+      summary: To get the list of products based on id
+      parameters:
+        - in: "path"
+          name: "product_id"
+          description: "The product_id to be fetched"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Product info
+          schema:
+            $ref: "#/definitions/GetProductResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - "products"
+      summary: To delete a product based on product_id
+      parameters:
+        - in: "path"
+          name: "product_id"
+          description: "The product_id to be deleted"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Product removed
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /products/category/add:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - "products"
+      summary: To tag new category to the existing product
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/AddProductCategoryRequest"
+      responses:
+        200:
+          description: Category tagged
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /products/category/remove:
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - "products"
+      summary: To untag a category for a specific product
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/RemoveProductCategoryRequest"
+      responses:
+        200:
+          description: Category removed
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /products/quantity/add:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - "products"
+      summary: To add a quantity to an existing product
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/AddProductQuantityRequest"
+      responses:
+        200:
+          description: Quantity added
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /products/quantity/update:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - "products"
+      summary: To update the quantity of an existing product
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateProductQuantityRequest"
+      responses:
+        200:
+          description: Quantity updated
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /products/quantity/remove:
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - "products"
+      summary: To delete a quantity of an existing product
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/RemoveProductQuantityRequest"
+      responses:
+        200:
+          description: Quantity removed
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
 definitions:
   GenericResponse:
     type: object
@@ -257,7 +508,7 @@ definitions:
       name: "Auth"
   CreateUser:
     type: object
-    require:
+    required:
       - name
       - email
       - phone_number
@@ -359,3 +610,240 @@ definitions:
         type: string
     xml:
       name: "UpdateCategoryRequest"
+  CreateProductRequest:
+    type: object
+    properties:
+      name:
+        type: string
+        example: "Dummy product"
+      description:
+        type: string
+        example: "Dummy Description"
+      thumbnail_url:
+        type: string
+        example: "http://34.126.104.103:8080/images/IMG_4977.jpg"
+      display_priority:
+        type: integer
+        example: 3
+      product_details:
+        type: array
+        items:
+          type: object
+          properties:
+            quantity:
+              type: integer
+            measuring_units:
+              type: string
+              example: grams
+            listing_price:
+              type: number
+            sale_price:
+              type: number
+            discount:
+              type: number
+              example: 0.00
+      category_ids:
+        type: array
+        items:
+          type: integer
+        example: [2, 4, 6]
+    xml:
+      name: "CreateProductRequest"
+  UpdateProductRequest:
+    type: object
+    properties:
+      product_id:
+        type: string
+      name:
+        type: string
+        example: "Dummy product upated"
+      description:
+        type: string
+        example: "Dummy Description updated"
+      thumbnail_url:
+        type: string
+        example: "http://34.126.104.103:8080/images/IMG_4977.jpg"
+      display_priority:
+        type: integer
+        example: 4
+    xml:
+      name: "UpdateProductRequest"
+  AddProductCategoryRequest:
+    type: object
+    properties:
+      product_id:
+        type: string
+      category_id:
+        type: integer
+    xml:
+      name: "AddProductCategoryRequest"
+  RemoveProductCategoryRequest:
+    type: object
+    properties:
+      product_id:
+        type: string
+      category_id:
+        type: integer
+    xml:
+      name: "RemoveProductCategoryRequest"
+  AddProductQuantityRequest:
+    type: object
+    properties:
+      product_id:
+        type: string
+      quantity:
+        type: integer
+      measuring_units:
+        type: string
+        example: grams
+      listing_price:
+        type: number
+      sale_price:
+        type: number
+      discount:
+        type: number
+        example: 0.00
+    xml:
+      name: "AddProductQuantityRequest"
+  UpdateProductQuantityRequest:
+    type: object
+    properties:
+      product_id:
+        type: string
+      quantity:
+        type: integer
+      measuring_units:
+        type: string
+        example: grams
+      listing_price:
+        type: number
+      sale_price:
+        type: number
+      discount:
+        type: number
+        example: 0.00
+    xml:
+      name: "UpdateProductQuantityRequest"
+  RemoveProductQuantityRequest:
+    type: object
+    properties:
+      product_id:
+        type: string
+      quantity:
+        type: integer
+    xml:
+      name: "RemoveProductQuantityRequest"
+  CreateProductResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          product_id:
+            type: integer
+    xml:
+      name: "CreateProductResponse"
+  ListProductResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "Dummy product"
+            description:
+              type: string
+              example: "Dummy Description"
+            thumbnail_url:
+              type: string
+              example: "http://34.126.104.103:8080/images/IMG_4977.jpg"
+            display_priority:
+              type: integer
+              example: 3
+            product_details:
+              type: array
+              items:
+                type: object
+                properties:
+                  quantity:
+                    type: integer
+                  measuring_units:
+                    type: string
+                    example: grams
+                  listing_price:
+                    type: number
+                  sale_price:
+                    type: number
+                  discount:
+                    type: number
+                    example: 0.00
+            category_ids:
+              type: array
+              items:
+                type: integer
+              example: [2, 4, 6]
+    xml:
+      name: "ListProductResponse"
+  GetProductResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          name:
+            type: string
+            example: "Dummy product"
+          description:
+            type: string
+            example: "Dummy Description"
+          thumbnail_url:
+            type: string
+            example: "http://34.126.104.103:8080/images/IMG_4977.jpg"
+          display_priority:
+            type: integer
+            example: 3
+          product_details:
+            type: array
+            items:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                measuring_units:
+                  type: string
+                  example: grams
+                listing_price:
+                  type: number
+                sale_price:
+                  type: number
+                discount:
+                  type: number
+                  example: 0.00
+          category_ids:
+            type: array
+            items:
+              type: integer
+            example: [2, 4, 6]
+    xml:
+      name: "GetProductResponse"

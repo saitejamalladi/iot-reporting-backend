@@ -6,6 +6,7 @@ const RandomKeyService = require('./randomKey');
 const constants = require('../constants');
 const bcrypt = require('bcrypt');
 const SALT_ROUNDS = constants.BCRY_SALT_ROUNDS;
+const response = require("../utils/response");
 
 class UserService {
 	async createUserCredentials(userId, password, role) {
@@ -30,10 +31,11 @@ class UserService {
 			user_id: userId
 		});
 		emailService.sendWelcomeEmail(user);
-		return {
+		let responseData = {
 			"user_id": userId,
 			"customer_id": customerId
 		};
+		return response.handleSuccessResponseWithData("Registration successful", responseData)
 	}
 	async createSalesStaff(user) {
 		let userId = user['email'];
@@ -48,7 +50,7 @@ class UserService {
 			user_id: userId
 		});
 		emailService.sendInvitationEmail(user, tempPassword);
-		return userId;
+		return response.handleSuccessResponse("Staff invitation Sent");
 	}
 }
 module.exports = new UserService();
