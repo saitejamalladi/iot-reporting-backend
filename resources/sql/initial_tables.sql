@@ -389,6 +389,7 @@ DROP TABLE IF EXISTS `madhuram`.`product_details` ;
 CREATE TABLE IF NOT EXISTS `madhuram`.`product_details` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `quantity` INT NOT NULL DEFAULT 1000,
+  `available_units` INT NOT NULL DEFAULT 1,
   `measuring_units` VARCHAR(256) NOT NULL DEFAULT 'grams',
   `sale_price` DECIMAL(8,2) NOT NULL,
   `discount` DECIMAL(5,2) NOT NULL DEFAULT 0.00,

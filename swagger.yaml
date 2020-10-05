@@ -632,6 +632,9 @@ definitions:
           properties:
             quantity:
               type: integer
+            available_units:
+              type: integer
+              example: 1
             measuring_units:
               type: string
               example: grams
@@ -693,6 +696,9 @@ definitions:
         type: string
       quantity:
         type: integer
+      available_units:
+        type: integer
+        example: 1
       measuring_units:
         type: string
         example: grams
@@ -712,6 +718,9 @@ definitions:
         type: string
       quantity:
         type: integer
+      available_units:
+        type: integer
+        example: 1
       measuring_units:
         type: string
         example: grams
@@ -782,6 +791,9 @@ definitions:
                 properties:
                   quantity:
                     type: integer
+                  available_units:
+                    type: integer
+                    example: 1
                   measuring_units:
                     type: string
                     example: grams
@@ -830,6 +842,9 @@ definitions:
               properties:
                 quantity:
                   type: integer
+                available_units:
+                  type: integer
+                  example: 1
                 measuring_units:
                   type: string
                   example: grams

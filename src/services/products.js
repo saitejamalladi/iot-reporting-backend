@@ -25,6 +25,7 @@ class ProductsService {
 			return {
 				product_id: productId,
 				quantity: detail['quantity'],
+				available_units: detail['available_units'],
 				measuring_units: detail['measuring_units'],
 				listing_price: detail['listing_price'],
 				sale_price: detail['sale_price'],
@@ -49,7 +50,7 @@ class ProductsService {
 				where: {
 					is_deleted: false
 				},
-				attributes: ['quantity', 'measuring_units', 'listing_price', 'sale_price', 'discount'],
+				attributes: ['quantity', 'available_units', 'measuring_units', 'listing_price', 'sale_price', 'discount'],
 				raw: true
 			}, {
 				model: ProductCategoriesModel,
@@ -85,7 +86,7 @@ class ProductsService {
 				where: {
 					is_deleted: false
 				},
-				attributes: ['quantity', 'measuring_units', 'listing_price', 'sale_price', 'discount'],
+				attributes: ['quantity', 'available_units', 'measuring_units', 'listing_price', 'sale_price', 'discount'],
 				raw: true
 			}, {
 				model: ProductCategoriesModel,
@@ -183,6 +184,7 @@ class ProductsService {
 			}
 		})) {
 			await ProductDetailsModel.update({
+				available_units: productObj['available_units'],
 				measuring_units: productObj['measuring_units'],
 				listing_price: productObj['listing_price'],
 				sale_price: productObj['sale_price'] ,
@@ -199,6 +201,7 @@ class ProductsService {
 			await ProductDetailsModel.create({
 				product_id: productObj['product_id'],
 				quantity: productObj['quantity'],
+				available_units: productObj['available_units'],
 				measuring_units: productObj['measuring_units'],
 				listing_price: productObj['listing_price'],
 				sale_price: productObj['sale_price'] ,

@@ -13,6 +13,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: 1000
     },
+    available_units: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1
+    },
     measuring_units: {
       type: DataTypes.STRING,
       allowNull: false,
