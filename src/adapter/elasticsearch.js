@@ -2,7 +2,7 @@ const elasticsearch = require('elasticsearch');
 const config = require('../config');
 var client = new elasticsearch.Client({
 	host: config.elasticsearch.host,
-	httpAuth: 'elastic:changeme',
+	httpAuth: config.elasticsearch.username + ':' + config.elasticsearch.password,
 	log: 'trace',
 	apiVersion: config.elasticsearch.version
 });

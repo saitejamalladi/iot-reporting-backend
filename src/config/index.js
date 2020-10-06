@@ -15,6 +15,8 @@ module.exports = {
 	},
 	elasticsearch: {
 		version: process.env.ELASTIC_SEARCH_VERSION,
-		host: process.env.ELASTIC_SEARCH_HOST
+		host: process.env.ELASTIC_SEARCH_HOST,
+		username: process.env.ELASTIC_SEARCH_USERNAME,
+		password: process.env.ELASTIC_SEARCH_PASSWORD
 	}
 };
