@@ -11,6 +11,7 @@ class ElasticsearchService {
 		}
 	}
 	async searchProducts (index, searchText) {
+		let fuzziness = searchText.length > 3 ?  "AUTO" : 0;
 		let searchResult =  await elasticsearch.search({
 			index: index,
 			body: {
@@ -18,25 +19,48 @@ class ElasticsearchService {
 					"bool": {
 						"must": [
 							{
-								"term": {
-									"is_deleted": 0
+								"fuzzy": {
+									"name": {
+										"value": searchText,
+										"fuzziness": fuzziness
+									}
 								}
 							},
 							{
-								"match": {
-									"name": searchText
+								"term": {
+									"is_deleted": 0
 								}
 							}
 						]
 					}
 				},
-				"sort" : [
+				"sort": [
 					"_score",
-					{ "display_priority" : {"order" : "desc"}},
-					{ "sales_count" : {"order" : "desc"}},
-					{ "rating" : {"order" : "desc"}},
-					{ "updated_at" : {"order" : "desc"}},
-					{ "created_at" : {"order" : "desc"}}
+					{
+						"display_priority": {
+							"order": "desc"
+						}
+					},
+					{
+						"sales_count": {
+							"order": "desc"
+						}
+					},
+					{
+						"rating": {
+							"order": "desc"
+						}
+					},
+					{
+						"updated_at": {
+							"order": "desc"
+						}
+					},
+					{
+						"created_at": {
+							"order": "desc"
+						}
+					}
 				]
 			}
 		});
