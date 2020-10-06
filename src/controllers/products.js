@@ -23,6 +23,14 @@ class ProductsController {
 			return next(err)
 		}
 	}
+	async searchProduct(req, res, next) {
+		try {
+			let responseObj = await productsService.search(req.params['item']);
+			res.status(responseObj.status_code).json(responseObj);
+		} catch(err) {
+			return next(err)
+		}
+	}
 	async getProduct(req, res, next) {
 		try {
 			const errors = validationResult(req);

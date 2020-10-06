@@ -6,5 +6,6 @@ module.exports = {
 	USER_ID: "USER_ID",
 	USER_ROLE: "USER_ROLE",
 	VALIDATIONS: validations,
-	ROLES: roles
+	ROLES: roles,
+	PRODUCT_INDEX: "products"
 };

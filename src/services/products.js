@@ -2,25 +2,26 @@ const ProductsModel = require('../models/products').Products;
 const ProductCategoriesModel = require('../models/products').ProductCategories;
 const ProductDetailsModel = require('../models/products').ProductDetails;
 const RandomKeyService = require('./randomKey');
+const elasticsearchService = require('./elasticsearch');
 const response = require("../utils/response");
-
+const constants = require('../constants');
+const moment = require('moment');
 class ProductsService {
 	async create(productObj) {
 		let productId = "product_" + await RandomKeyService.generate(10);
-		await ProductsModel.create({
+		let productModel = {
 			product_id: productId,
 			name: productObj['name'],
 			description: productObj['description'],
 			thumbnail_url: productObj['thumbnail_url'],
-			display_priority: productObj['display_priority'],
-		});
+			display_priority: productObj['display_priority']
+		};
 		let productCategories = productObj['category_ids'].map(categoryId => {
 			return {
 				category_id: categoryId,
-				product_id: productId,
+				product_id: productId
 			}
 		});
-		await ProductCategoriesModel.bulkCreate(productCategories);
 		let productDetails = productObj['product_details'].map(detail => {
 			return {
 				product_id: productId,
@@ -32,7 +33,12 @@ class ProductsService {
 				discount: detail['discount']
 			}
 		});
+		await ProductsModel.create(productModel);
+		await ProductCategoriesModel.bulkCreate(productCategories);
 		await ProductDetailsModel.bulkCreate(productDetails);
+
+		let productInfo = await this.getProductInfo(productId);
+		await elasticsearchService.save(constants.PRODUCT_INDEX, productId, productInfo);
 		let productResObj = {
 			product_id: productId
 		};
@@ -73,13 +79,20 @@ class ProductsService {
 		}
 		return response.handleSuccessResponseWithData("Product list", productList);
 	}
-	async get(productId) {
+	async search(searchText) {
+		try  {
+			let productResults = await elasticsearchService.searchProducts(constants.PRODUCT_INDEX, searchText);
+			return response.handleSuccessResponseWithData("Available products", productResults);
+		} catch (error) {
+			return response.handleBadRequest("Unable to search currently.\n Error : " + error);
+		}
+	}
+	async getProductInfo(productId) {
 		let productInfo = await ProductsModel.findOne({
 			where: {
 				product_id: productId,
 				is_deleted: false
 			},
-			attributes: ['product_id', 'name', 'description', 'thumbnail_url', 'display_priority'],
 			include: [{
 				model: ProductDetailsModel,
 				as: "product_details",
@@ -87,6 +100,7 @@ class ProductsService {
 					is_deleted: false
 				},
 				attributes: ['quantity', 'available_units', 'measuring_units', 'listing_price', 'sale_price', 'discount'],
+				required: false,
 				raw: true
 			}, {
 				model: ProductCategoriesModel,
@@ -95,6 +109,7 @@ class ProductsService {
 					is_deleted: false
 				},
 				attributes: ['category_id'],
+				required: false,
 				raw: true
 			}
 			],
@@ -105,6 +120,10 @@ class ProductsService {
 		if(productInfo) {
 			productInfo['categories'] = productInfo['categories'].map(category => category['category_id']);
 		}
+		return productInfo;
+	}
+	async get(productId) {
+		let productInfo = await this.getProductInfo(productId);
 		return response.handleSuccessResponseWithData("Product info", productInfo);
 	}
 	async update(productObj) {
@@ -119,6 +138,8 @@ class ProductsService {
 				is_deleted: false
 			}
 		});
+		let productInfo = await this.getProductInfo(productObj['product_id']);
+		await elasticsearchService.save(constants.PRODUCT_INDEX, productObj['product_id'], productInfo);
 		return response.handleSuccessResponse("Product updated");
 	}
 	async remove(productId) {
@@ -146,6 +167,7 @@ class ProductsService {
 				is_deleted: false
 			}
 		});
+		await elasticsearchService.remove(constants.PRODUCT_INDEX, productId);
 		return response.handleSuccessResponse("Product removed from listing");
 	}
 	async addCategory(productId, categoryId) {
@@ -161,6 +183,8 @@ class ProductsService {
 				category_id: categoryId
 			});
 		}
+		let productInfo = await this.getProductInfo(productId);
+		await elasticsearchService.save(constants.PRODUCT_INDEX, productId, productInfo);
 		return response.handleSuccessResponse("Category tagged");
 	}
 	async removeCategory(productId, categoryId) {
@@ -173,6 +197,8 @@ class ProductsService {
 				is_deleted: false
 			}
 		});
+		let productInfo = await this.getProductInfo(productId);
+		await elasticsearchService.save(constants.PRODUCT_INDEX, productId, productInfo);
 		return response.handleSuccessResponse("Category removed");
 	}
 	async updateQuantity(productObj) {
@@ -196,7 +222,6 @@ class ProductsService {
 					is_deleted: false
 				}
 			});
-			return response.handleSuccessResponse("Quantity updated");
 		} else {
 			await ProductDetailsModel.create({
 				product_id: productObj['product_id'],
@@ -207,8 +232,10 @@ class ProductsService {
 				sale_price: productObj['sale_price'] ,
 				discount: productObj['discount']
 			});
-			return response.handleSuccessResponse("Quantity added");
 		}
+		let productInfo = await this.getProductInfo(productObj['product_id']);
+		await elasticsearchService.save(constants.PRODUCT_INDEX, productObj['product_id'], productInfo);
+		return response.handleSuccessResponse("Quantity added/updated");
 	}
 	async removeQuantity(productObj) {
 		await ProductDetailsModel.update({
@@ -220,8 +247,9 @@ class ProductsService {
 				is_deleted: false
 			}
 		});
+		let productInfo = await this.getProductInfo(productObj['product_id']);
+		await elasticsearchService.save(constants.PRODUCT_INDEX, productObj['product_id'], productInfo);
 		return response.handleSuccessResponse("Quantity removed");
 	}
-
 }
 module.exports = new ProductsService();

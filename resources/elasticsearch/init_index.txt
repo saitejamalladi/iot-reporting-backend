@@ -1,0 +1,70 @@
+DELETE products
+
+PUT products
+{
+  "mappings": {
+    "properties": {
+      "name": { "type": "text" },
+      "description": { "type": "text" },
+      "display_priority": { "type": "integer" },
+      "sales_count": { "type": "integer" },
+      "rating": { "type": "float" },
+      "created_at": { "type": "date" },
+      "updated_at": { "type": "date" }
+    }
+  }
+}
+
+GET products/_search
+ {
+    "query": {
+      "bool": {
+        "must": [
+          {
+            "term": {
+              "product_id": "product_4e0cc526faa19f2a90331601975643673"
+            }
+          },
+          {
+            "term": {
+              "is_deleted": false
+            }
+          },
+           {
+            "match": {
+              "name": "Kheer"
+            }
+          }
+        ]
+      }
+    },
+    "sort": [
+      "_score",
+      {
+        "display_priority": {
+          "order": "desc"
+        }
+      },
+      {
+        "sales_count": {
+          "order": "desc"
+        }
+      },
+      {
+        "rating": {
+          "order": "desc"
+        }
+      },
+      {
+        "updated_at": {
+          "order": "desc"
+        }
+      },
+      {
+        "created_at": {
+          "order": "desc"
+        }
+      }
+    ]
+  }
+

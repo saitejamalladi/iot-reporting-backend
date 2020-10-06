@@ -273,6 +273,30 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+  /products/search/{item}:
+    get:
+      tags:
+        - "products"
+      summary: To search the available products
+      parameters:
+        - in: "path"
+          name: "item"
+          description: "The product to be searched"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Available Products List
+          schema:
+            $ref: "#/definitions/SearchProductResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
   /products/update:
     post:
       security:
@@ -618,7 +642,7 @@ definitions:
         example: "Dummy product"
       description:
         type: string
-        example: "Dummy Description"
+        example: "Description"
       thumbnail_url:
         type: string
         example: "http://34.126.104.103:8080/images/IMG_4977.jpg"
@@ -632,19 +656,22 @@ definitions:
           properties:
             quantity:
               type: integer
+              example: 1000
             available_units:
               type: integer
               example: 1
             measuring_units:
               type: string
-              example: grams
+              example: 'grams'
             listing_price:
               type: number
+              example: 1000
             sale_price:
               type: number
+              example: 750
             discount:
               type: number
-              example: 0.00
+              example: 25.00
       category_ids:
         type: array
         items:
@@ -811,6 +838,59 @@ definitions:
               example: [2, 4, 6]
     xml:
       name: "ListProductResponse"
+  SearchProductResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "Dummy product"
+            description:
+              type: string
+              example: "Dummy Description"
+            thumbnail_url:
+              type: string
+              example: "http://34.126.104.103:8080/images/IMG_4977.jpg"
+            display_priority:
+              type: integer
+              example: 3
+            product_details:
+              type: array
+              items:
+                type: object
+                properties:
+                  quantity:
+                    type: integer
+                  available_units:
+                    type: integer
+                    example: 1
+                  measuring_units:
+                    type: string
+                    example: grams
+                  listing_price:
+                    type: number
+                  sale_price:
+                    type: number
+                  discount:
+                    type: number
+                    example: 0.00
+            category_ids:
+              type: array
+              items:
+                type: integer
+              example: [2, 4, 6]
+    xml:
+      name: "SearchProductResponse"
   GetProductResponse:
     type: object
     properties:

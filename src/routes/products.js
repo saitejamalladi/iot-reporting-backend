@@ -16,6 +16,11 @@ router.get(
 	productsController.listProduct
 );
 router.get(
+	'/search/:item',
+	productsMiddleware.validate(constants.VALIDATIONS.SEARCH),
+	productsController.searchProduct
+);
+router.get(
 	'/:product_id',
 	productsMiddleware.validate(constants.VALIDATIONS.FETCH),
 	productsController.getProduct

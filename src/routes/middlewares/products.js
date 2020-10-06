@@ -26,6 +26,11 @@ class ProductsMiddleware {
 					param('product_id', 'Missing product id').exists(),
 				]
 			}
+			case constants.VALIDATIONS.SEARCH: {
+				return [
+					param('item', 'Missing searching parameter').exists(),
+				]
+			}
 			case constants.VALIDATIONS.UPDATE: {
 				return [
 					check('product_id', 'Missing product_id').exists(),

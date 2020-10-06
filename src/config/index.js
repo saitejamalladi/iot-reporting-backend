@@ -12,5 +12,9 @@ module.exports = {
 		port: process.env.DB_PORT,
 		username: process.env.DB_USER,
 		password: process.env.DB_PASS
+	},
+	elasticsearch: {
+		version: process.env.ELASTIC_SEARCH_VERSION,
+		host: process.env.ELASTIC_SEARCH_HOST
 	}
 };
