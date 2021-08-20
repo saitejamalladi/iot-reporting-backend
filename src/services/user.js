@@ -1,5 +1,7 @@
 const Users = require("../models/users").Users;
 const UserRoles = require("../models/users").UserRoles;
+const Accounts = require("../models/users").Accounts;
+const AccountRoles = require("../models/users").AccountRoles;
 const response = require("../utils/response");
 
 class UserService {
@@ -9,6 +11,12 @@ class UserService {
 
   async listUserRoles() {
     return response.handleSuccessResponse(await UserRoles.findAll());
+  }
+  async listAccounts() {
+    return response.handleSuccessResponse(await Accounts.findAll());
+  }
+  async listAccountRoles() {
+    return response.handleSuccessResponse(await AccountRoles.findAll());
   }
 }
 module.exports = new UserService();

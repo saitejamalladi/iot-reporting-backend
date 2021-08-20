@@ -4,4 +4,7 @@ const userController = require("../controllers/user");
 
 router.get("/", userController.listUsers);
 router.get("/roles", userController.listUserRoles);
+router.get("/account/", userController.listAccounts);
+router.get("/account/roles", userController.listAccountRoles);
+
 module.exports = router;
