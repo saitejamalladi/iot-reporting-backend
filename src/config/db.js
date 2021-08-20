@@ -1,5 +1,5 @@
-const config = require('./');
-const Sequelize = require('sequelize');
+const config = require("./");
+const Sequelize = require("sequelize");
 
 module.exports = {
   sequelize: new Sequelize(
@@ -9,7 +9,8 @@ module.exports = {
     {
       host: config.sql.host,
       port: config.sql.port,
-      dialect: 'mysql',
-      logging: console.log
-    })
+      dialect: "mysql",
+      logging: console.log,
+    }
+  ),
 };
