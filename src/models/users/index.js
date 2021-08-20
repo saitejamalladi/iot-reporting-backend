@@ -8,5 +8,6 @@ db.Accounts = require("./Accounts")(db.sequelize, Sequelize.DataTypes);
 db.AccountRoles = require("./AccountRoles")(db.sequelize, Sequelize.DataTypes);
 
 db.Bins = require("./Bins")(db.sequelize, Sequelize.DataTypes);
+db.Categories = require("./Categories")(db.sequelize, Sequelize.DataTypes);
 
 module.exports = db;
