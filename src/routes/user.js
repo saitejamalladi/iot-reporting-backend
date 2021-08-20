@@ -10,4 +10,7 @@ router.get("/account/roles", userController.listAccountRoles);
 router.get("/bins", userController.listBins);
 router.get("/categories", userController.listCategories);
 
+router.get("/companies", userController.listCompanies);
+router.get("/devices", userController.listDevices);
+
 module.exports = router;
