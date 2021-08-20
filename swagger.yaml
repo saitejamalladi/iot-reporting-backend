@@ -2,8 +2,8 @@ swagger: "2.0"
 
 info:
   version: 1.0.0
-  title: Madhurams APIs
-  description: The Madhuram API document is intended strictly for internal use only.
+  title: IOT Reporting APIs
+  description: The IOT Reporting API document is intended strictly for internal use only.
 
 schemes:
   - http
