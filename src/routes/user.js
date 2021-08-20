@@ -7,4 +7,6 @@ router.get("/roles", userController.listUserRoles);
 router.get("/account/", userController.listAccounts);
 router.get("/account/roles", userController.listAccountRoles);
 
+router.get("/bins", userController.listBins);
+
 module.exports = router;

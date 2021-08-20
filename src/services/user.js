@@ -2,6 +2,7 @@ const Users = require("../models/users").Users;
 const UserRoles = require("../models/users").UserRoles;
 const Accounts = require("../models/users").Accounts;
 const AccountRoles = require("../models/users").AccountRoles;
+const Bins = require("../models/users").Bins;
 const response = require("../utils/response");
 
 class UserService {
@@ -17,6 +18,9 @@ class UserService {
   }
   async listAccountRoles() {
     return response.handleSuccessResponse(await AccountRoles.findAll());
+  }
+  async listBins() {
+    return response.handleSuccessResponse(await Bins.findAll());
   }
 }
 module.exports = new UserService();
