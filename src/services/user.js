@@ -6,6 +6,8 @@ const Bins = require("../models/users").Bins;
 const Categories = require("../models/users").Categories;
 const Companies = require("../models/users").Companies;
 const Devices = require("../models/users").Devices;
+const Locations = require("../models/users").Locations;
+const MealCount = require("../models/users").MealCount;
 
 const response = require("../utils/response");
 
@@ -34,6 +36,12 @@ class UserService {
   }
   async listDevices() {
     return response.handleSuccessResponse(await Devices.findAll());
+  }
+  async listLocations() {
+    return response.handleSuccessResponse(await Locations.findAll());
+  }
+  async listMealCount() {
+    return response.handleSuccessResponse(await MealCount.findAll());
   }
 }
 module.exports = new UserService();

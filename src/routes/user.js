@@ -13,4 +13,7 @@ router.get("/categories", userController.listCategories);
 router.get("/companies", userController.listCompanies);
 router.get("/devices", userController.listDevices);
 
+router.get("/locations", userController.listLocations);
+router.get("/mealcount", userController.listMealCount);
+
 module.exports = router;
