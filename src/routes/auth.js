@@ -6,7 +6,6 @@ const constants = require("../constants");
 
 router.post(
   "/token",
-  authMiddleware.verifyBasicAuthentication,
   authMiddleware.validate(constants.VALIDATIONS.GENERATE_TOKEN),
   authController.generateToken
 );

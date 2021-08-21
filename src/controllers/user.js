@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const userService = require("../services/user");
 const response = require("../utils/response");
+const constants = require("../constants");
 
 class UserController {
   async listUsers(req, res, next) {
@@ -11,6 +12,21 @@ class UserController {
         return;
       }
       let responseObj = await userService.listUsers();
+      res.status(responseObj.status_code).json(responseObj);
+    } catch (err) {
+      return next(err);
+    }
+  }
+  async getInfo(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json(response.handleValidationError(errors.array()));
+        return;
+      }
+      let responseObj = await userService.getInfo(
+        req.tokenInfo[constants.ACCOUNT_ID]
+      );
       res.status(responseObj.status_code).json(responseObj);
     } catch (err) {
       return next(err);

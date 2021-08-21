@@ -15,8 +15,6 @@ securityDefinitions:
     type: apiKey
     name: Authorization
     in: header
-  basicAuth:
-    type: basic
 
 tags:
   - name: "auth"
@@ -39,8 +37,6 @@ tags:
 paths:
   /auth/token:
     post:
-      security:
-        - basicAuth: []
       tags:
         - "auth"
       summary: To generate an auth token.
@@ -96,6 +92,51 @@ paths:
       responses:
         200:
           description: The generated jwt token.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /user/info:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "user"
+      summary: To get the user info based on token accountId
+      responses:
+        200:
+          description: Product info
+          schema:
+            $ref: "#/definitions/UserInfoResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    delete:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "products"
+      summary: To delete a product based on product_id
+      parameters:
+        - in: "path"
+          name: "product_id"
+          description: "The product_id to be deleted"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Product removed
           schema:
             $ref: "#/definitions/GenericResponse"
         400:
@@ -517,10 +558,10 @@ definitions:
   Auth:
     type: object
     required:
-      - user_id
+      - username
       - password
     properties:
-      user_id:
+      username:
         type: string
         example: ajdfhky12o83uwkjhfi
         description: user id of the user.
@@ -607,6 +648,24 @@ definitions:
               type: string
     xml:
       name: "ListCategoryResponse"
+  GetUserInfoResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
+    xml:
+      name: "GetUserInfoResponse"
   GetCategoryResponse:
     type: object
     properties:

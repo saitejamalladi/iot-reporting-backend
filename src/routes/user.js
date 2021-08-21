@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const authMiddleware = require("./middlewares/auth");
 const userController = require("../controllers/user");
 
-router.get("/", userController.listUsers);
+router.get("/info", authMiddleware.verifyToken, userController.getInfo);
+router.get("/list", userController.listUsers);
 router.get("/roles", userController.listUserRoles);
 router.get("/account/", userController.listAccounts);
 router.get("/account/roles", userController.listAccountRoles);

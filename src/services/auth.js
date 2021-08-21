@@ -1,36 +1,33 @@
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 const constants = require("../constants");
 const config = require("../config");
 const response = require("../utils/response");
-let AppClients = require("../models/users").AppClients;
-let UserCredentialsModel = require("../models/users").UserCredentials;
+let Users = require("../models/users").Users;
+const randomKey = require("../utils/randomKey");
 
 class AuthService {
   async generateToken(auth) {
-    let userId = auth["user_id"];
-    let password = auth["password"];
-    let userDetails = await UserCredentialsModel.findOne({
+    let username = auth["username"];
+    let password = randomKey.getSHA256ofJSON(auth["password"]);
+    let userInfo = await Users.findOne({
       where: {
-        user_id: userId,
+        username: username,
+        password: password,
       },
-      attributes: ["password", "role"],
       raw: true,
     });
-    if (userDetails) {
-      if (await bcrypt.compare(password, userDetails["password"])) {
-        let payload = {};
-        payload[constants.USER_ID] = userId;
-        payload[constants.USER_ROLE] = userDetails["role"].toUpperCase();
-        let token = jwt.sign(payload, config.jwt.secret, { expiresIn: "10d" });
-        let responseData = {
-          token: token,
-        };
-        return response.handleSuccessResponseWithData(
-          "Access token",
-          responseData
-        );
-      }
+    if (userInfo) {
+      let payload = {};
+      payload[constants.USERNAME] = userInfo["username"];
+      payload[constants.ACCOUNT_ID] = userInfo["accountId"];
+      let token = jwt.sign(payload, config.jwt.secret, { expiresIn: "10d" });
+      let responseData = {
+        token: token,
+      };
+      return response.handleSuccessResponseWithData(
+        "Access token",
+        responseData
+      );
     }
     return response.handleUnauthorizedRequest("Invalid user credentials");
   }
@@ -41,18 +38,6 @@ class AuthService {
         else resolve(tokenInfo);
       });
     });
-  }
-  async verifyAuthentication(clientId, clientSecret) {
-    let clientInfo = await AppClients.findOne({
-      where: {
-        client_id: clientId,
-        is_deleted: false,
-      },
-      attributes: ["client_secret"],
-    });
-    if (clientInfo)
-      return await bcrypt.compare(clientSecret, clientInfo["client_secret"]);
-    return false;
   }
 }
 module.exports = new AuthService();

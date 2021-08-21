@@ -15,7 +15,20 @@ class UserService {
   async listUsers() {
     return response.handleSuccessResponse(await Users.findAll());
   }
-
+  async getInfo(accountId) {
+    let userInfo = await Users.findOne({
+      where: {
+        accountId: accountId,
+        accountStatus: 1,
+      },
+      attributes: [],
+      raw: true,
+    });
+    if(userInfo) {
+      return response.handleSuccessResponse(userInfo);
+    }
+    return response.handleNotFoundRequest("User not found");
+  }
   async listUserRoles() {
     return response.handleSuccessResponse(await UserRoles.findAll());
   }
