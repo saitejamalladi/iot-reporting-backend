@@ -21,11 +21,20 @@ class UserService {
         accountId: accountId,
         accountStatus: 1,
       },
-      attributes: [],
+      attributes: [
+        "accountId",
+        "companyId",
+        "username",
+        "address",
+        "address2",
+        "email",
+        "firstName",
+        "lastName",
+      ],
       raw: true,
     });
-    if(userInfo) {
-      return response.handleSuccessResponse(userInfo);
+    if (userInfo) {
+      return response.handleSuccessResponseWithData("User Info", userInfo);
     }
     return response.handleNotFoundRequest("User not found");
   }

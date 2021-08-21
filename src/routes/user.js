@@ -3,7 +3,11 @@ const router = express.Router();
 const authMiddleware = require("./middlewares/auth");
 const userController = require("../controllers/user");
 
-router.get("/info", authMiddleware.verifyToken, userController.getInfo);
+router.get(
+  "/info",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next),
+  userController.getInfo
+);
 router.get("/list", userController.listUsers);
 router.get("/roles", userController.listUserRoles);
 router.get("/account/", userController.listAccounts);

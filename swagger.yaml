@@ -113,7 +113,7 @@ paths:
         200:
           description: Product info
           schema:
-            $ref: "#/definitions/UserInfoResponse"
+            $ref: "#/definitions/GetUserInfoResponse"
         400:
           description: Something wrong in the body.
           schema:
@@ -660,10 +660,30 @@ definitions:
       res_data:
         type: object
         properties:
-          id:
+          accountId:
             type: integer
-          name:
+            example: 16
+          companyId:
+            type: integer
+            example: 1
+          username:
             type: string
+            example: "bob"
+          address:
+            type: string
+            example: "somewhere"
+          address2:
+            type: string
+            example: "somehow"
+          email:
+            type: string
+            example: "bob@test.com"
+          firstName:
+            type: string
+            example: "bob"
+          lastName:
+            type: string
+            example: "the builder"
     xml:
       name: "GetUserInfoResponse"
   GetCategoryResponse:

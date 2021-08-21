@@ -15,7 +15,7 @@ class AuthMiddleware {
     }
   }
 
-  async verifyToken(grantedRoles, req, res, next) {
+  async verifyToken(req, res, next) {
     try {
       if (req.headers["authorization"]) {
         let token = req.headers["authorization"];
@@ -26,18 +26,6 @@ class AuthMiddleware {
         let tokenInfo = await authService.getTokenInfo(token);
         if (tokenInfo) {
           req.tokenInfo = tokenInfo;
-          // let userRole = tokenInfo[constants.USER_ROLE];
-          // if (grantedRoles.includes(userRole)) {
-          //   next();
-          // } else {
-          //   return res
-          //     .status(401)
-          //     .json(
-          //       response.handleUnauthorizedRequest(
-          //         "You dont have sufficient privilege to access this. Please check with the admin"
-          //       )
-          //     );
-          // }
           next();
         } else {
           return res
@@ -45,13 +33,7 @@ class AuthMiddleware {
             .json(response.handleUnauthorizedRequest("Invalid token"));
         }
       } else {
-        if (grantedRoles.includes[constants.ROLES.PUBLIC]) {
-          next();
-        } else {
-          return res
-            .status(400)
-            .send(response.handleBadRequest("Missing token"));
-        }
+        return res.status(401).send(response.handleUnauthorizedRequest("Missing token"));
       }
     } catch (error) {
       return res
