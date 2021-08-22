@@ -21,6 +21,8 @@ tags:
     description: "Token generation"
   - name: "user"
     description: "Access to user information"
+  - name: "device"
+    description: "Access to device information"
   - name: "order"
     description: "Everything about meetings"
   - name: "products"
@@ -74,10 +76,51 @@ paths:
           schema:
             $ref: "#/definitions/GenericResponse"
 
+  /device/register:
+    post:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "device"
+      summary: To register the device
+      description: This API registers the device
+      responses:
+        200:
+          description: The generated jwt token.
+          schema:
+            $ref: "#/definitions/PostRegisterDeviceResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /device/list:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "device"
+      summary: To get the list of devices
+      responses:
+        200:
+          description: Registered Devices list
+          schema:
+            $ref: "#/definitions/GetDeviceListResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
   /user/create:
     post:
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       tags:
         - "user"
       summary: To create the user
@@ -102,6 +145,7 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+
   /user/info:
     get:
       security:
@@ -114,31 +158,6 @@ paths:
           description: Product info
           schema:
             $ref: "#/definitions/GetUserInfoResponse"
-        400:
-          description: Something wrong in the body.
-          schema:
-            $ref: "#/definitions/GenericResponse"
-        401:
-          description: Invalid credentials
-          schema:
-            $ref: "#/definitions/GenericResponse"
-    delete:
-      security:
-        - Bearer: [ ]
-      tags:
-        - "products"
-      summary: To delete a product based on product_id
-      parameters:
-        - in: "path"
-          name: "product_id"
-          description: "The product_id to be deleted"
-          required: true
-          type: string
-      responses:
-        200:
-          description: Product removed
-          schema:
-            $ref: "#/definitions/GenericResponse"
         400:
           description: Something wrong in the body.
           schema:
@@ -605,6 +624,22 @@ definitions:
         example: Dream@123123
     xml:
       name: "CreateUser"
+  PostRegisterDeviceResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          device_id:
+            type: string
+    xml:
+      name: "PostRegisterDeviceResponse"
   CreateCategoryRequest:
     type: object
     properties:
@@ -648,6 +683,28 @@ definitions:
               type: string
     xml:
       name: "ListCategoryResponse"
+  GetDeviceListResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          device_id:
+            type: integer
+          account_id:
+            type: integer
+          created_at:
+            type: string
+          updated_at:
+            type: string
+    xml:
+      name: "GetDeviceListResponse"
   GetUserInfoResponse:
     type: object
     properties:
