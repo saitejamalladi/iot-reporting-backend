@@ -165,7 +165,7 @@ paths:
   /user/reset-password:
     put:
       tags:
-        - "scales"
+        - "user"
       summary: To reset the password
       parameters:
         - in: "body"
