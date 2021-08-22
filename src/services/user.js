@@ -8,10 +8,79 @@ const Companies = require("../models/users").Companies;
 const Devices = require("../models/users").Devices;
 const Locations = require("../models/users").Locations;
 const MealCount = require("../models/users").MealCount;
+const randomKey = require("../utils/randomKey");
 
 const response = require("../utils/response");
 
 class UserService {
+  async register(user) {
+    let parentId = user["parent_id"] ? user["parent_id"] : null;
+    await Users.create({
+      companyId: user["company_id"],
+      username: user["username"],
+      firstName: user["first_name"],
+      lastName: user["last_name"],
+      address: user["address"],
+      address2: user["address2"],
+      email: user["email"],
+      parentId: parentId,
+      password: randomKey.getSHA256ofJSON(user["password"]),
+    });
+    return response.handleSuccessResponse("User registered successfully");
+  }
+  async update(user, accountId) {
+    let userInfo = Users.findOne({
+      where: {
+        accountId: accountId,
+        accountStatus: 1,
+      },
+      raw: true,
+    });
+    if (userInfo) {
+      await Users.update(
+        {
+          firstName: user["first_name"],
+          lastName: user["last_name"],
+          address: user["address"],
+          address2: user["address2"],
+          email: user["email"],
+        },
+        {
+          where: {
+            accountId: accountId,
+            accountStatus: 1,
+          },
+        }
+      );
+      return response.handleSuccessResponse("User updated successfully");
+    }
+    return response.handleNotFoundRequest("user not found");
+  }
+  async resetPassword(user) {
+    let userInfo = Users.findOne({
+      where: {
+        username: user["username"],
+        accountStatus: 1,
+      },
+      raw: true,
+    });
+    if (userInfo) {
+      await Users.update(
+        {
+          password: randomKey.getSHA256ofJSON(user["password"]),
+        },
+        {
+          where: {
+            username: user["username"],
+            accountStatus: 1,
+          },
+        }
+      );
+      return response.handleSuccessResponse("Password updated successfully");
+    }
+    return response.handleNotFoundRequest("user not found");
+  }
+
   async listUsers() {
     return response.handleSuccessResponse(await Users.findAll());
   }
@@ -30,6 +99,7 @@ class UserService {
         "email",
         "firstName",
         "lastName",
+        "parentId",
       ],
       raw: true,
     });

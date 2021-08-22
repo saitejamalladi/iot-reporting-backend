@@ -162,6 +162,30 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+  /user/reset-password:
+    put:
+      tags:
+        - "scales"
+      summary: To reset the password
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/PutResetPasswordRequest"
+      responses:
+        200:
+          description: Password updated successfully
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
   /scale/{device_id}:
     get:
       security:
@@ -213,24 +237,22 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
-  /user/create:
+  /user:
     post:
-      security:
-        - basicAuth: [ ]
       tags:
         - "user"
-      summary: To create the user
-      description: This API create the user
+      summary: To register the user
+      description: This API registers the user
       parameters:
         - in: "body"
           name: "body"
-          description: "user object that needs to be created"
+          description: "user object that needs to be registered"
           required: true
           schema:
-            $ref: "#/definitions/CreateUser"
+            $ref: "#/definitions/PostRegisterUserRequest"
       responses:
         200:
-          description: The generated jwt token.
+          description: User registration successful
           schema:
             $ref: "#/definitions/GenericResponse"
         400:
@@ -241,8 +263,33 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
-
-  /user/info:
+    put:
+      tags:
+        - "user"
+      security:
+        - Bearer: [ ]
+      summary: To update the user
+      description: This API updates the user profile
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "user object that needs to be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/PutUpdateUserRequest"
+      responses:
+        200:
+          description: User updated successfully
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
     get:
       security:
         - Bearer: [ ]
@@ -290,40 +337,94 @@ definitions:
         description:  password of the user.
     xml:
       name: "Auth"
-  CreateUser:
+
+  PostRegisterUserRequest:
     type: object
     required:
-      - name
+      - company_id
+      - username
+      - first_name
+      - last_name
+      - address
+      - address2
       - email
-      - phone_number
-      - country_code
-      - timezone
       - password
       - confirm_password
     properties:
-      name:
+      company_id:
+        type: integer
+      username:
         type: string
-        example: John Doe
+        example: john.doe
+      first_name:
+        type: string
+        example: John
+      last_name:
+        type: string
+        example: Doe
+      address:
+        type: string
+        example: Address line 1
+      address2:
+        type: string
+        example: Address line 2
       email:
         type: string
         example: john@jon.com
-      phone_number:
-        type: number
-        example: 9876543210
-      country_code:
-        type: number
-        example: 91
-      timezone:
-        type: string
-        example: Asia/Kolkata
+      parent_id:
+        type: integer
       password:
         type: string
-        example: Dream@123123
+        example: Password@2021
       confirm_password:
         type: string
-        example: Dream@123123
+        example: Password@2021
     xml:
-      name: "CreateUser"
+      name: "PostRegisterUserRequest"
+  PutUpdateUserRequest:
+    type: object
+    required:
+      - first_name
+      - last_name
+      - address
+      - address2
+      - email
+    properties:
+      first_name:
+        type: string
+        example: John
+      last_name:
+        type: string
+        example: Doe
+      address:
+        type: string
+        example: Address line 1
+      address2:
+        type: string
+        example: Address line 2
+      email:
+        type: string
+        example: john@jon.com
+    xml:
+      name: "PutUpdateUserRequest"
+  PutResetPasswordRequest:
+    type: object
+    required:
+      - username
+      - password
+      - confirm_password
+    properties:
+      username:
+        type: string
+        example: john.doe
+      password:
+        type: string
+        example: Password@2021
+      confirm_password:
+        type: string
+        example: Password@2021
+    xml:
+      name: "PutResetPasswordRequest"
   GetUserInfoResponse:
     type: object
     properties:

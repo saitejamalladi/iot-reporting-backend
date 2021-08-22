@@ -10,7 +10,7 @@ module.exports = function (sequelize, DataTypes) {
       },
       companyId: {
         type: DataTypes.INTEGER,
-        unique: true,
+        allowNull: false,
       },
       username: {
         type: DataTypes.STRING,
@@ -45,7 +45,6 @@ module.exports = function (sequelize, DataTypes) {
       },
       accountStatus: {
         type: DataTypes.INTEGER,
-        allowNull: false,
       },
     },
     {

@@ -8,7 +8,7 @@ const scaleController = require("../controllers/scale");
 router.post(
   "",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
-  scaleMiddleware.validate(constants.VALIDATIONS.CREATE),
+  scaleMiddleware.validate(constants.VALIDATIONS.REGISTER),
   scaleController.create
 );
 router.put(

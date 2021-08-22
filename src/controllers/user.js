@@ -4,6 +4,48 @@ const response = require("../utils/response");
 const constants = require("../constants");
 
 class UserController {
+  async register(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json(response.handleValidationError(errors.array()));
+        return;
+      }
+      let responseObj = await userService.register(req.body);
+      res.status(responseObj.status_code).json(responseObj);
+    } catch (err) {
+      return next(err);
+    }
+  }
+  async update(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json(response.handleValidationError(errors.array()));
+        return;
+      }
+      let responseObj = await userService.update(
+        req.body,
+        req.tokenInfo[constants.ACCOUNT_ID]
+      );
+      res.status(responseObj.status_code).json(responseObj);
+    } catch (err) {
+      return next(err);
+    }
+  }
+  async resetPassword(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json(response.handleValidationError(errors.array()));
+        return;
+      }
+      let responseObj = await userService.resetPassword(req.body);
+      res.status(responseObj.status_code).json(responseObj);
+    } catch (err) {
+      return next(err);
+    }
+  }
   async listUsers(req, res, next) {
     try {
       const errors = validationResult(req);

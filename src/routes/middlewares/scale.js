@@ -4,7 +4,7 @@ const constants = require("../../constants");
 class ScaleMiddleware {
   validate(method) {
     switch (method) {
-      case constants.VALIDATIONS.CREATE: {
+      case constants.VALIDATIONS.REGISTER: {
         return [
           check("name", "Missing name").exists(),
           check("serial_num", "Missing email").exists(),
