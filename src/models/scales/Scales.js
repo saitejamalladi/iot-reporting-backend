@@ -1,19 +1,27 @@
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
-    "RegisteredDevices",
+    "Scales",
     {
-      id_registered_devices: {
+      id_scales: {
         autoIncrement: true,
         type: DataTypes.BIGINT,
         allowNull: false,
         primaryKey: true,
       },
-      device_id: {
+      scale_id: {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
       },
-      account_id: {
+      name: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      serial_num: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      device_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
@@ -35,7 +43,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     {
       sequelize,
-      tableName: "registered_devices",
+      tableName: "scales",
       timestamps: false,
     }
   );

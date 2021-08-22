@@ -1,5 +1,5 @@
-class UserMiddleware {
+class DeviceMiddleware {
   validate() {}
 }
 
-module.exports = new UserMiddleware();
+module.exports = new DeviceMiddleware();
