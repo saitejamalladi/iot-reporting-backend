@@ -18,10 +18,14 @@ router.put(
   binController.update
 );
 router.get(
-  "/:device_id",
+  "",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   binController.list
 );
-router.delete("/:scale_id", binController.delete);
+router.delete(
+  "/:bin_id",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next),
+  binController.delete
+);
 
 module.exports = router;
