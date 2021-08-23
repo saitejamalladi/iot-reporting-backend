@@ -55,6 +55,47 @@ class ScaleController {
       return next(err);
     }
   }
+  async addData(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json(response.handleValidationError(errors.array()));
+        return;
+      }
+      let responseObj = await scaleService.addData(req.body);
+      res.status(responseObj.status_code).json(responseObj);
+    } catch (err) {
+      return next(err);
+    }
+  }
+  async listData(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json(response.handleValidationError(errors.array()));
+        return;
+      }
+      let responseObj = await scaleService.listData(req.params["scale_id"]);
+      res.status(responseObj.status_code).json(responseObj);
+    } catch (err) {
+      return next(err);
+    }
+  }
+  async deleteData(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json(response.handleValidationError(errors.array()));
+        return;
+      }
+      let responseObj = await scaleService.deleteData(
+        req.params["id_scale_data"]
+      );
+      res.status(responseObj.status_code).json(responseObj);
+    } catch (err) {
+      return next(err);
+    }
+  }
 }
 
 module.exports = new ScaleController();

@@ -1,8 +1,8 @@
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
-    "Scales",
+    "ScaleData",
     {
-      id_scales: {
+      id_scale_data: {
         autoIncrement: true,
         type: DataTypes.BIGINT,
         allowNull: false,
@@ -13,15 +13,39 @@ module.exports = function (sequelize, DataTypes) {
         unique: true,
         allowNull: false,
       },
-      name: {
+      gross_weight: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+      },
+      net_weight: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+      },
+      bin_id: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      serial_num: {
+      service: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      device_id: {
+      category: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      sub_category1: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      sub_category2: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      location: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      service_waste: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -43,7 +67,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     {
       sequelize,
-      tableName: "scales",
+      tableName: "scale_data",
       timestamps: false,
     }
   );

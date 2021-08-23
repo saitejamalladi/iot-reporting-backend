@@ -1,4 +1,5 @@
 const Scales = require("../models/scales").Scales;
+const ScaleData = require("../models/scales").ScaleData;
 const randomKey = require("../utils/randomKey");
 const response = require("../utils/response");
 
@@ -62,6 +63,59 @@ class ScaleService {
       }
     );
     return response.handleSuccessResponse("Scale deleted");
+  }
+  async addData(scaleData) {
+    await ScaleData.create({
+      scale_id: scaleData["scale_id"],
+      bin_id: scaleData["bin_id"],
+      gross_weight: scaleData["gross_weight"],
+      net_weight: scaleData["net_weight"],
+      service: scaleData["service"],
+      category: scaleData["category"],
+      sub_category1: scaleData["sub_category1"],
+      sub_category2: scaleData["sub_category2"],
+      location: scaleData["location"],
+      service_waste: scaleData["service_waste"],
+    });
+    return response.handleSuccessResponse("Scale data added");
+  }
+  async listData(scaleId) {
+    let scaleData = await ScaleData.findAll({
+      where: {
+        scale_id: scaleId,
+        is_deleted: 0,
+      },
+      attributes: [
+        "id_scale_data",
+        "scale_id",
+        "gross_weight",
+        "net_weight",
+        "bin_id",
+        "service",
+        "category",
+        "sub_category1",
+        "sub_category2",
+        "location",
+        "service_waste",
+        "created_at",
+        "updated_at",
+      ],
+      raw: true,
+    });
+    return response.handleSuccessResponseWithData("Scale data", scaleData);
+  }
+  async deleteData(idScaleData) {
+    await Scales.update(
+      {
+        is_deleted: 1,
+      },
+      {
+        where: {
+          id_scale_data: idScaleData,
+        },
+      }
+    );
+    return response.handleSuccessResponse("Scale Data deleted");
   }
 }
 module.exports = new ScaleService();

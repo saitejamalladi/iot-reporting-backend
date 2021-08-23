@@ -24,4 +24,17 @@ router.get(
 );
 router.delete("/:scale_id", scaleController.delete);
 
+router.post(
+  "/data",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next),
+  scaleMiddleware.validate(constants.VALIDATIONS.ADD_DATA),
+  scaleController.create
+);
+router.get(
+  "/data/:scale_id",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next),
+  scaleController.list
+);
+router.delete("/data/:id_scale_data", scaleController.deleteData);
+
 module.exports = router;

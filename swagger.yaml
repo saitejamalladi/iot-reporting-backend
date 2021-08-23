@@ -311,6 +311,85 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+  /scale/data:
+    post:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To add data to a scale
+      description: This API adds data to the scale
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "scale data that needs to be created"
+          required: true
+          schema:
+            $ref: "#/definitions/PostAddScaleDataRequest"
+      responses:
+        200:
+          description: Scale data added successfully
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /scale/data/{scale_id}:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To get the list of scale data
+      parameters:
+        - in: "path"
+          name: "scale_id"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Scale data list
+          schema:
+            $ref: "#/definitions/GetScalesDataResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /scale/data/{id_scale_data}:
+    delete:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To delete a scale based on id_scale_data
+      parameters:
+        - in: "path"
+          name: "id_scale_data"
+          description: "The id_scale_data to be deleted"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Scale removed
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
   /bin/:
     post:
       security:
@@ -615,6 +694,31 @@ definitions:
         type: string
     xml:
       name: "PostAddScaleRequest"
+  PostAddScaleDataRequest:
+    type: object
+    properties:
+      scale_id:
+        type: string
+      bin_id:
+        type: string
+      gross_weight:
+        type: number
+      net_weight:
+        type: number
+      service:
+        type: string
+      category:
+        type: string
+      sub_category1:
+        type: string
+      sub_category2:
+        type: string
+      location:
+        type: string
+      service_waste:
+        type: string
+    xml:
+      name: "PostAddScaleDataRequest"
   PostAddScaleResponse:
     type: object
     properties:
@@ -677,6 +781,48 @@ definitions:
               type: string
     xml:
       name: "GetScalesResponse"
+  GetScalesDataResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            id_scale_data:
+              type: integer
+            scale_id:
+              type: string
+            gross_weight:
+              type: number
+            net_weight:
+              type: number
+            bin_id:
+              type: string
+            service:
+              type: string
+            category:
+              type: string
+            sub_category1:
+              type: string
+            sub_category2:
+              type: string
+            location:
+              type: string
+            service_waste:
+              type: string
+            created_at:
+              type: string
+            updated_at:
+              type: string
+    xml:
+      name: "GetScalesDataResponse"
   PostAddBinRequest:
     type: object
     properties:
