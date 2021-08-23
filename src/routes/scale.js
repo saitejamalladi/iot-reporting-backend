@@ -18,7 +18,7 @@ router.put(
   scaleController.update
 );
 router.get(
-  "/:device_id",
+  "/list/:device_id",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   scaleController.list
 );
@@ -26,6 +26,11 @@ router.delete(
   "/:scale_id",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   scaleController.delete
+);
+router.get(
+  "/config",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next),
+  scaleController.getConfig
 );
 router.post(
   "/data",

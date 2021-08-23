@@ -1,5 +1,8 @@
+const Users = require("../models/users").Users;
 const Scales = require("../models/scales").Scales;
 const ScaleData = require("../models/scales").ScaleData;
+const Service = require("../models/scales").Service;
+const ServiceWasteConfig = require("../models/scales").ServiceWasteConfig;
 const randomKey = require("../utils/randomKey");
 const response = require("../utils/response");
 
@@ -63,6 +66,43 @@ class ScaleService {
       }
     );
     return response.handleSuccessResponse("Scale deleted");
+  }
+  async getConfig(accountId) {
+    let userInfo = await Users.findOne({
+      where: {
+        accountId: accountId,
+        accountStatus: 1,
+      },
+      attributes: ["companyId"],
+      raw: true,
+    });
+    if (!userInfo || !userInfo["companyId"])
+      return response.handleNotFoundRequest("account not found");
+    let companyId = userInfo["companyId"];
+    let service = await Service.findAll({
+      where: {
+        companyId: companyId,
+      },
+      attributes: ["service"],
+      raw: true,
+    });
+    let services = service.map((service) => service["service"]);
+    let serviceWaste = await ServiceWasteConfig.findAll({
+      where: {
+        company_id: companyId,
+      },
+      attributes: ["service_waste"],
+      raw: true,
+    });
+    let serviceWastes = serviceWaste.map(
+      (serviceWaste) => serviceWaste["service_waste"]
+    );
+
+    let resData = {
+      service: services,
+      service_waste: serviceWastes,
+    };
+    return response.handleSuccessResponseWithData("Scale Config", resData);
   }
   async addData(scaleData) {
     await ScaleData.create({

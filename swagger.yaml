@@ -260,7 +260,7 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
-  /scale/{device_id}:
+  /scale/list/{device_id}:
     get:
       security:
         - Bearer: [ ]
@@ -311,6 +311,27 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+  /scale/config:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To get the config
+      responses:
+        200:
+          description: Scale Config
+          schema:
+            $ref: "#/definitions/GetScaleConfigResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+
   /scale/data:
     post:
       security:
@@ -781,6 +802,30 @@ definitions:
               type: string
     xml:
       name: "GetScalesResponse"
+  GetScaleConfigResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            service:
+              type: array
+              items:
+                type: string
+            service_waste:
+              type: array
+              items:
+                type: string
+    xml:
+      name: "GetScaleConfigResponse"
   GetScalesDataResponse:
     type: object
     properties:

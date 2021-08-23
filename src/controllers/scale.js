@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 const scaleService = require("../services/scale");
+const constants = require("../constants");
 const response = require("../utils/response");
 
 class ScaleController {
@@ -50,6 +51,21 @@ class ScaleController {
         return;
       }
       let responseObj = await scaleService.delete(req.params["scale_id"]);
+      res.status(responseObj.status_code).json(responseObj);
+    } catch (err) {
+      return next(err);
+    }
+  }
+  async getConfig(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json(response.handleValidationError(errors.array()));
+        return;
+      }
+      let responseObj = await scaleService.getConfig(
+        req.tokenInfo[constants.ACCOUNT_ID]
+      );
       res.status(responseObj.status_code).json(responseObj);
     } catch (err) {
       return next(err);
