@@ -2,17 +2,17 @@ module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
     "Bins",
     {
-      binId: {
+      id_bins: {
         autoIncrement: true,
         type: DataTypes.BIGINT,
         allowNull: false,
         primaryKey: true,
       },
-      accountId: {
+      bin_id: {
         type: DataTypes.INTEGER,
         unique: true,
       },
-      binName: {
+      name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -20,9 +20,27 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.DECIMAL,
         allowNull: false,
       },
-      maxWeight: {
+      max_weight: {
         type: DataTypes.DECIMAL,
         allowNull: false,
+      },
+      account_id: {
+        type: DataTypes.INTEGER,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+      },
+      is_deleted: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
       },
     },
     {

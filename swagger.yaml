@@ -25,6 +25,8 @@ tags:
     description: "Access to device data"
   - name: "scales"
     description: "Access to scales data"
+  - name: "bins"
+    description: "Access to bins data"
 
 paths:
   /auth/token:
@@ -66,6 +68,102 @@ paths:
           schema:
             $ref: "#/definitions/GenericResponse"
 
+  /user:
+    post:
+      tags:
+        - "user"
+      summary: To register the user
+      description: This API registers the user
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "user object that needs to be registered"
+          required: true
+          schema:
+            $ref: "#/definitions/PostRegisterUserRequest"
+      responses:
+        200:
+          description: User registration successful
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    put:
+      tags:
+        - "user"
+      security:
+        - Bearer: [ ]
+      summary: To update the user
+      description: This API updates the user profile
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "user object that needs to be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/PutUpdateUserRequest"
+      responses:
+        200:
+          description: User updated successfully
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "user"
+      summary: To get the user info based on token accountId
+      responses:
+        200:
+          description: User info
+          schema:
+            $ref: "#/definitions/GetUserInfoResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /user/reset-password:
+    put:
+      tags:
+        - "user"
+      summary: To reset the password
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/PutResetPasswordRequest"
+      responses:
+        200:
+          description: Password updated successfully
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
   /device/register:
     post:
       security:
@@ -162,30 +260,6 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
-  /user/reset-password:
-    put:
-      tags:
-        - "user"
-      summary: To reset the password
-      parameters:
-        - in: "body"
-          name: "body"
-          required: true
-          schema:
-            $ref: "#/definitions/PutResetPasswordRequest"
-      responses:
-        200:
-          description: Password updated successfully
-          schema:
-            $ref: "#/definitions/GenericResponse"
-        400:
-          description: Something wrong in the body.
-          schema:
-            $ref: "#/definitions/GenericResponse"
-        401:
-          description: Invalid credentials
-          schema:
-            $ref: "#/definitions/GenericResponse"
   /scale/{device_id}:
     get:
       security:
@@ -226,7 +300,7 @@ paths:
           type: string
       responses:
         200:
-          description: Category removed
+          description: Scale removed
           schema:
             $ref: "#/definitions/GenericResponse"
         400:
@@ -237,24 +311,26 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
-  /user:
+  /bin/:
     post:
+      security:
+        - Bearer: [ ]
       tags:
-        - "user"
-      summary: To register the user
-      description: This API registers the user
+        - "bins"
+      summary: To add a bin
+      description: This API adds the bin
       parameters:
         - in: "body"
           name: "body"
-          description: "user object that needs to be registered"
+          description: "bin object that needs to be created"
           required: true
           schema:
-            $ref: "#/definitions/PostRegisterUserRequest"
+            $ref: "#/definitions/PostAddBinRequest"
       responses:
         200:
-          description: User registration successful
+          description: Bin added successfully
           schema:
-            $ref: "#/definitions/GenericResponse"
+            $ref: "#/definitions/PostAddBinResponse"
         400:
           description: Something wrong in the body.
           schema:
@@ -264,22 +340,22 @@ paths:
           schema:
             $ref: "#/definitions/GenericResponse"
     put:
-      tags:
-        - "user"
       security:
         - Bearer: [ ]
-      summary: To update the user
-      description: This API updates the user profile
+      tags:
+        - "bins"
+      summary: To update a bin
+      description: This API updates the bin
       parameters:
         - in: "body"
           name: "body"
-          description: "user object that needs to be updated"
+          description: "bin object that needs to be updated"
           required: true
           schema:
-            $ref: "#/definitions/PutUpdateUserRequest"
+            $ref: "#/definitions/PutUpdateBinRequest"
       responses:
         200:
-          description: User updated successfully
+          description: Bin updated successfully
           schema:
             $ref: "#/definitions/GenericResponse"
         400:
@@ -294,13 +370,13 @@ paths:
       security:
         - Bearer: [ ]
       tags:
-        - "user"
-      summary: To get the user info based on token accountId
+        - "bins"
+      summary: To get the list of bins
       responses:
         200:
-          description: User info
+          description: Bins list
           schema:
-            $ref: "#/definitions/GetUserInfoResponse"
+            $ref: "#/definitions/GetBinsResponse"
         400:
           description: Something wrong in the body.
           schema:
@@ -309,6 +385,33 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+  /bin/{bin_id}:
+    delete:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "bins"
+      summary: To delete a bin based on bin_id
+      parameters:
+        - in: "path"
+          name: "bin_id"
+          description: "The bin_id to be deleted"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Bin removed
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+
 definitions:
   GenericResponse:
     type: object
@@ -512,17 +615,6 @@ definitions:
         type: string
     xml:
       name: "PostAddScaleRequest"
-  PutUpdateScaleRequest:
-    type: object
-    properties:
-      name:
-        type: string
-      scale_id:
-        type: string
-      serial_num:
-        type: string
-    xml:
-      name: "PutUpdateScaleRequest"
   PostAddScaleResponse:
     type: object
     properties:
@@ -539,6 +631,17 @@ definitions:
             type: string
     xml:
       name: "PostAddScaleResponse"
+  PutUpdateScaleRequest:
+    type: object
+    properties:
+      name:
+        type: string
+      scale_id:
+        type: string
+      serial_num:
+        type: string
+    xml:
+      name: "PutUpdateScaleRequest"
   GetListScaleRequest:
     type: object
     properties:
@@ -574,3 +677,71 @@ definitions:
               type: string
     xml:
       name: "GetScalesResponse"
+  PostAddBinRequest:
+    type: object
+    properties:
+      name:
+        type: string
+      weight:
+        type: number
+      max_weight:
+        type: number
+    xml:
+      name: "PostAddBinRequest"
+  PostAddBinResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          bin_id:
+            type: string
+    xml:
+      name: "PostAddBinResponse"
+  PutUpdateBinRequest:
+    type: object
+    properties:
+      bin_id:
+        type: string
+      name:
+        type: string
+      weight:
+        type: number
+      max_weight:
+        type: number
+    xml:
+      name: "PutUpdateScaleRequest"
+  GetBinsResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            bin_id:
+              type: string
+            name:
+              type: string
+            weight:
+              type: number
+            max_weight:
+              type: number
+            created_at:
+              type: string
+            updated_at:
+              type: string
+    xml:
+      name: "GetBinsResponse"

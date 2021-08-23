@@ -1,4 +1,5 @@
 module.exports = {
+  CREATE: "CREATE",
   REGISTER: "REGISTER",
   UPDATE: "UPDATE",
   RESET_PASSWORD: "RESET_PASSWORD",
