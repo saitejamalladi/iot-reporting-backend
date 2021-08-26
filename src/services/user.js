@@ -58,7 +58,7 @@ class UserService {
     return response.handleNotFoundRequest("user not found");
   }
   async resetPassword(user) {
-    let userInfo = Users.findOne({
+    let userInfo = await Users.findOne({
       where: {
         username: user["username"],
         accountStatus: 1,
