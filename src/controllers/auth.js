@@ -10,7 +10,7 @@ class AuthController {
         return;
       }
       let response = await authService.generateToken(req.body);
-      res.status(200).json(response);
+      res.status(response.status_code).json(response);
     } catch (err) {
       res.status(500).send(err);
     }

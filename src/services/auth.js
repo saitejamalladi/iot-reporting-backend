@@ -23,6 +23,7 @@ class AuthService {
       let token = jwt.sign(payload, config.jwt.secret, { expiresIn: "10d" });
       let responseData = {
         token: token,
+        userInfo: userInfo,
       };
       return response.handleSuccessResponseWithData(
         "Access token",
