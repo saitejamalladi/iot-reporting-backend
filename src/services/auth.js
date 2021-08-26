@@ -3,20 +3,21 @@ const constants = require("../constants");
 const config = require("../config");
 const response = require("../utils/response");
 let Users = require("../models/users").Users;
-const randomKey = require("../utils/randomKey");
+const bcrypt = require("bcrypt");
 
 class AuthService {
   async generateToken(auth) {
     let username = auth["username"];
-    let password = randomKey.getSHA256ofJSON(auth["password"]);
     let userInfo = await Users.findOne({
       where: {
         username: username,
-        password: password,
       },
       raw: true,
     });
-    if (userInfo) {
+    if (
+      userInfo &&
+      (await bcrypt.compare(auth["password"], userInfo["password"]))
+    ) {
       let payload = {};
       payload[constants.USERNAME] = userInfo["username"];
       payload[constants.ACCOUNT_ID] = userInfo["accountId"];

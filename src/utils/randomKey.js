@@ -1,10 +1,6 @@
 const crypto = require("crypto");
 
 class RandomKeyService {
-  getSHA256ofJSON(text) {
-    const INSECURE_ALGORITHM = "sha1";
-    return crypto.createHash(INSECURE_ALGORITHM).update(text).digest("hex");
-  }
   generate(size) {
     return new Promise((resolve) => {
       if (!size || size <= 0 || size > 16) {

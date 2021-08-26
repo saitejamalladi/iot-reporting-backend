@@ -8,8 +8,9 @@ const Companies = require("../models/users").Companies;
 const Devices = require("../models/users").Devices;
 const Locations = require("../models/users").Locations;
 const MealCount = require("../models/users").MealCount;
-const randomKey = require("../utils/randomKey");
-
+const bcrypt = require("bcrypt");
+const constants = require("../constants");
+const SALT_ROUNDS = constants.BCRYPT_SALT_ROUNDS;
 const response = require("../utils/response");
 
 class UserService {
@@ -24,7 +25,7 @@ class UserService {
       address2: user["address2"],
       email: user["email"],
       parentId: parentId,
-      password: randomKey.getSHA256ofJSON(user["password"]),
+      password: await bcrypt.hash(user["password"], SALT_ROUNDS),
     });
     return response.handleSuccessResponse("User registered successfully");
   }
@@ -67,7 +68,7 @@ class UserService {
     if (userInfo) {
       await Users.update(
         {
-          password: randomKey.getSHA256ofJSON(user["password"]),
+          password: await bcrypt.hash(user["password"], SALT_ROUNDS),
         },
         {
           where: {
