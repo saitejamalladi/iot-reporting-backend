@@ -30,6 +30,21 @@ class ScaleController {
       return next(err);
     }
   }
+  async listAll(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json(response.handleValidationError(errors.array()));
+        return;
+      }
+      let responseObj = await scaleService.listAll(
+        req.tokenInfo[constants.ACCOUNT_ID]
+      );
+      res.status(responseObj.status_code).json(responseObj);
+    } catch (err) {
+      return next(err);
+    }
+  }
   async list(req, res, next) {
     try {
       const errors = validationResult(req);

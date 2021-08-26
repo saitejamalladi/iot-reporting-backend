@@ -1,4 +1,5 @@
 const Users = require("../models/users").Users;
+const RegisteredDevices = require("../models/scales").RegisteredDevices;
 const Scales = require("../models/scales").Scales;
 const ScaleData = require("../models/scales").ScaleData;
 const Service = require("../models/scales").Service;
@@ -8,7 +9,7 @@ const response = require("../utils/response");
 
 class ScaleService {
   async create(scaleObj) {
-    let scaleId = await randomKey.generate();
+    let scaleId = await randomKey.generate(6);
     await Scales.create({
       scale_id: scaleId,
       device_id: scaleObj["device_id"],
@@ -19,6 +20,25 @@ class ScaleService {
       scale_id: scaleId,
     };
     return response.handleSuccessResponseWithData("Scale added", resData);
+  }
+  async listAll(accountId) {
+    let scales = await Scales.findAll({
+      where: {
+        is_deleted: 0,
+      },
+      include: [
+        {
+          model: RegisteredDevices,
+          required: false,
+          where: {
+            account_id: accountId,
+          },
+          attributes: [],
+        },
+      ],
+      raw: true,
+    });
+    return response.handleSuccessResponseWithData("Scales list", scales);
   }
   async list(deviceId) {
     let scales = await Scales.findAll({

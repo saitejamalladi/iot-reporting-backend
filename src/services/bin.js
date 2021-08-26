@@ -4,7 +4,7 @@ const response = require("../utils/response");
 
 class BinService {
   async create(binObj, accountId) {
-    let binId = await randomKey.generate();
+    let binId = await randomKey.generate(6);
     await Bins.create({
       bin_id: binId,
       name: binObj["name"],

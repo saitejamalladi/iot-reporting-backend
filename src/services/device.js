@@ -1,10 +1,10 @@
-const RegisteredDevices = require("../models/devices").RegisteredDevices;
+const RegisteredDevices = require("../models/scales").RegisteredDevices;
 const randomKey = require("../utils/randomKey");
 const response = require("../utils/response");
 
 class DeviceService {
   async register(accountId) {
-    let deviceId = await randomKey.generate();
+    let deviceId = await randomKey.generate(6);
     await RegisteredDevices.create({
       device_id: deviceId,
       account_id: accountId,
