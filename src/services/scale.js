@@ -1,4 +1,4 @@
-const Users = require("../models/users").Users;
+const Accounts = require("../models/users").Accounts;
 const RegisteredDevices = require("../models/scales").RegisteredDevices;
 const Scales = require("../models/scales").Scales;
 const ScaleData = require("../models/scales").ScaleData;
@@ -88,20 +88,20 @@ class ScaleService {
     return response.handleSuccessResponse("Scale deleted");
   }
   async getConfig(accountId) {
-    let userInfo = await Users.findOne({
+    let accountInfo = await Accounts.findOne({
       where: {
-        accountId: accountId,
-        accountStatus: 1,
+        account_id: accountId,
+        is_deleted: 0,
       },
-      attributes: ["companyId"],
+      attributes: ["company_id"],
       raw: true,
     });
-    if (!userInfo || !userInfo["companyId"])
+    if (!accountInfo || !accountInfo["company_id"])
       return response.handleNotFoundRequest("account not found");
-    let companyId = userInfo["companyId"];
+    let companyId = accountInfo["company_id"];
     let service = await Service.findAll({
       where: {
-        companyId: companyId,
+        company_id: companyId,
       },
       attributes: ["service"],
       raw: true,
