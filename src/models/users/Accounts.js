@@ -2,31 +2,45 @@ module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
     "Accounts",
     {
-      accountId: {
+      id_accounts: {
         autoIncrement: true,
         type: DataTypes.BIGINT,
         allowNull: false,
         primaryKey: true,
       },
-      createdBy: {
-        type: DataTypes.INTEGER,
+      account_id: {
+        type: DataTypes.STRING,
         unique: true,
       },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      parentAccount: {
-        type: DataTypes.INTEGER,
-      },
-      timezone: {
+      company_id: {
         type: DataTypes.STRING,
+      },
+      parent_account: {
+        type: DataTypes.STRING,
+      },
+      created_at: {
+        type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+      },
+      is_deleted: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
       },
     },
     {
       sequelize,
-      tableName: "account",
+      tableName: "accounts",
       timestamps: false,
     }
   );

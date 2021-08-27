@@ -5,6 +5,7 @@ module.exports = {
   BCRYPT_SALT_ROUNDS: 10,
   USERNAME: "USERNAME",
   ACCOUNT_ID: "ACCOUNT_ID",
+  USER_ID: "USER_ID",
   VALIDATIONS: validations,
   ROLES: roles,
 };

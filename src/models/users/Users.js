@@ -2,14 +2,27 @@ module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
     "users",
     {
-      accountId: {
+      id_users: {
         autoIncrement: true,
         type: DataTypes.BIGINT,
         allowNull: false,
         primaryKey: true,
       },
-      companyId: {
-        type: DataTypes.INTEGER,
+      user_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      first_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      last_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
       username: {
@@ -17,6 +30,10 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
       password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      account_id: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -28,23 +45,20 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      email: {
-        type: DataTypes.STRING,
+      created_at: {
+        type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
       },
-      firstName: {
-        type: DataTypes.STRING,
+      updated_at: {
+        type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
       },
-      lastName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      parentId: {
+      is_deleted: {
         type: DataTypes.INTEGER,
-      },
-      accountStatus: {
-        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
       },
     },
     {

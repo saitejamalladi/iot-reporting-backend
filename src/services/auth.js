@@ -20,7 +20,8 @@ class AuthService {
     ) {
       let payload = {};
       payload[constants.USERNAME] = userInfo["username"];
-      payload[constants.ACCOUNT_ID] = userInfo["accountId"];
+      payload[constants.ACCOUNT_ID] = userInfo["account_id"];
+      payload[constants.USER_ID] = userInfo["user_id"];
       let token = jwt.sign(payload, config.jwt.secret, { expiresIn: "10d" });
       let responseData = {
         token: token,

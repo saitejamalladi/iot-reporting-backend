@@ -9,7 +9,7 @@ module.exports = function (sequelize, DataTypes) {
         primaryKey: true,
       },
       bin_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         unique: true,
       },
       name: {
@@ -25,7 +25,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
       account_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
       },
       created_at: {
         type: DataTypes.DATE,

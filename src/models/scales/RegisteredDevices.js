@@ -14,7 +14,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
       account_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
       },
       created_at: {

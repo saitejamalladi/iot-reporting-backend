@@ -4,7 +4,7 @@ module.exports = function (sequelize, DataTypes) {
     {
       id_scale_data: {
         autoIncrement: true,
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
       },
@@ -13,7 +13,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
       company_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
       },
       created_at: {

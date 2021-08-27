@@ -19,6 +19,10 @@ securityDefinitions:
 tags:
   - name: "auth"
     description: "Token generation"
+  - name: "company"
+    description: "Access to company data"
+  - name: "account"
+    description: "Access to account data"
   - name: "user"
     description: "Access to user data"
   - name: "device"
@@ -67,7 +71,94 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
-
+  /account:
+    post:
+      tags:
+        - "account"
+      security:
+        - Bearer: [ ]
+      summary: To create an account
+      description: This API registers the account
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "account object that needs to be registered"
+          required: true
+          schema:
+            $ref: "#/definitions/PostRegisterAccountRequest"
+      responses:
+        200:
+          description: Account registration successful
+          schema:
+            $ref: "#/definitions/PostRegisterAccountResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    get:
+      tags:
+        - "account"
+      summary: To get the list of registered accounts
+      responses:
+        200:
+          description: Account list
+          schema:
+            $ref: "#/definitions/GetAccountListResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /user/company:
+    get:
+      tags:
+        - "company"
+      summary: To get the registered company list
+      responses:
+        200:
+          description: Company
+          schema:
+            $ref: "#/definitions/GetCompanyListResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /account/child/{account_id}:
+    get:
+      tags:
+        - "account"
+      security:
+        - Bearer: [ ]
+      summary: To get the list of child accounts
+      parameters:
+        - in: "path"
+          name: "account_id"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Child accounts
+          schema:
+            $ref: "#/definitions/GetChildAccountListResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
   /user:
     post:
       tags:
@@ -126,7 +217,7 @@ paths:
         - Bearer: [ ]
       tags:
         - "user"
-      summary: To get the user info based on token accountId
+      summary: To get the user info based on token user_id
       responses:
         200:
           description: User info
@@ -541,47 +632,144 @@ definitions:
     xml:
       name: "Auth"
 
-  PostRegisterUserRequest:
+  PostRegisterAccountRequest:
     type: object
     required:
       - company_id
-      - username
-      - first_name
-      - last_name
-      - address
-      - address2
-      - email
-      - password
-      - confirm_password
+      - name
+      - parent_account
     properties:
       company_id:
-        type: integer
-      username:
         type: string
-        example: john.doe
+      name:
+        type: string
+        example: Australia
+      parent_account:
+        type: string
+        example: acc_1
+    xml:
+      name: "PostRegisterAccountRequest"
+  PostRegisterAccountResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          account_id:
+            type: string
+    xml:
+      name: "PostRegisterAccountResponse"
+  GetCompanyListResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            company_id:
+              type: string
+            name:
+              type: string
+            created_at:
+              type: string
+            updated_at:
+              type: string
+    xml:
+      name: "GetCompanyListResponse"
+  GetAccountListResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            account_id:
+              type: string
+            company_id:
+              type: string
+    xml:
+      name: "GetAccountListResponse"
+  GetChildAccountListResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            account_id:
+              type: string
+            company_id:
+              type: string
+            parent_id:
+              type: string
+    xml:
+      name: "GetChildAccountListResponse"
+  PostRegisterUserRequest:
+    type: object
+    required:
+      - first_name
+      - last_name
+      - email
+      - address
+      - address2
+      - username
+      - password
+      - confirm_password
+      - account_id
+    properties:
       first_name:
         type: string
         example: John
       last_name:
         type: string
         example: Doe
-      address:
-        type: string
-        example: Address line 1
-      address2:
-        type: string
-        example: Address line 2
       email:
         type: string
         example: john@jon.com
-      parent_id:
-        type: integer
+      account_id:
+        type: string
+      username:
+        type: string
+        example: john.doe
       password:
         type: string
         example: Password@2021
       confirm_password:
         type: string
         example: Password@2021
+      address:
+        type: string
+        example: Address line 1
+      address2:
+        type: string
+        example: Address line 2
     xml:
       name: "PostRegisterUserRequest"
   PutUpdateUserRequest:
@@ -640,30 +828,28 @@ definitions:
       res_data:
         type: object
         properties:
-          accountId:
-            type: integer
-            example: 16
-          companyId:
-            type: integer
-            example: 1
+          user_id:
+            type: string
+          first_name:
+            type: string
+            example: "bob"
+          last_name:
+            type: string
+            example: "the builder"
+          email:
+            type: string
+            example: "bob@test.com"
           username:
             type: string
             example: "bob"
+          account_id:
+            type: string
           address:
             type: string
             example: "somewhere"
           address2:
             type: string
             example: "somehow"
-          email:
-            type: string
-            example: "bob@test.com"
-          firstName:
-            type: string
-            example: "bob"
-          lastName:
-            type: string
-            example: "the builder"
     xml:
       name: "GetUserInfoResponse"
   PostRegisterDeviceResponse:

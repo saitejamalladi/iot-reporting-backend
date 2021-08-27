@@ -6,15 +6,14 @@ class UserMiddleware {
     switch (method) {
       case constants.VALIDATIONS.REGISTER: {
         return [
-          check("company_id", "Missing company_id").exists(),
-          check("company_id", "Invalid company_id").isInt(),
-          check("username", "Missing username").exists(),
           check("first_name", "Missing first_name").exists(),
           check("last_name", "Missing last_name").exists(),
-          check("address", "Missing address").exists(),
-          check("address2", "Missing address2").exists(),
+          check("account_id", "Missing account_id").exists(),
           check("email", "Missing email").exists(),
           check("email", "Invalid email").isEmail(),
+          check("address", "Missing address").exists(),
+          check("address2", "Missing address2").exists(),
+          check("username", "Missing username").exists(),
           check("password", "missing password").exists(),
           check("confirm_password").custom((value, { req }) => {
             if (value === req.body.password) {

@@ -1,55 +1,48 @@
 const Users = require("../models/users").Users;
-const UserRoles = require("../models/users").UserRoles;
-const Accounts = require("../models/users").Accounts;
-const AccountRoles = require("../models/users").AccountRoles;
-const Bins = require("../models/users").Bins;
-const Categories = require("../models/users").Categories;
 const Companies = require("../models/users").Companies;
-const Devices = require("../models/users").Devices;
-const Locations = require("../models/users").Locations;
-const MealCount = require("../models/users").MealCount;
 const bcrypt = require("bcrypt");
 const constants = require("../constants");
 const SALT_ROUNDS = constants.BCRYPT_SALT_ROUNDS;
 const response = require("../utils/response");
+const randomKey = require("../utils/randomKey");
 
 class UserService {
   async register(user) {
-    let parentId = user["parent_id"] ? user["parent_id"] : null;
+    let userId = await randomKey.generate(6);
     await Users.create({
-      companyId: user["company_id"],
+      user_id: userId,
+      first_name: user["first_name"],
+      last_name: user["last_name"],
+      email: user["email"],
       username: user["username"],
-      firstName: user["first_name"],
-      lastName: user["last_name"],
+      password: await bcrypt.hash(user["password"], SALT_ROUNDS),
+      account_id: user["account_id"],
       address: user["address"],
       address2: user["address2"],
-      email: user["email"],
-      parentId: parentId,
-      password: await bcrypt.hash(user["password"], SALT_ROUNDS),
     });
     return response.handleSuccessResponse("User registered successfully");
   }
-  async update(user, accountId) {
+  async update(user, userId) {
     let userInfo = Users.findOne({
       where: {
-        accountId: accountId,
-        accountStatus: 1,
+        user_id: userId,
+        is_deleted: 0,
       },
       raw: true,
     });
     if (userInfo) {
       await Users.update(
         {
-          firstName: user["first_name"],
-          lastName: user["last_name"],
+          first_name: user["first_name"],
+          last_name: user["last_name"],
+          email: user["email"],
           address: user["address"],
           address2: user["address2"],
-          email: user["email"],
         },
         {
           where: {
-            accountId: accountId,
-            accountStatus: 1,
+            user_id: userId,
+            is_deleted: 0,
           },
         }
       );
@@ -61,7 +54,7 @@ class UserService {
     let userInfo = await Users.findOne({
       where: {
         username: user["username"],
-        accountStatus: 1,
+        is_deleted: 0,
       },
       raw: true,
     });
@@ -73,7 +66,7 @@ class UserService {
         {
           where: {
             username: user["username"],
-            accountStatus: 1,
+            is_deleted: 0,
           },
         }
       );
@@ -82,25 +75,33 @@ class UserService {
     return response.handleNotFoundRequest("user not found");
   }
 
-  async listUsers() {
-    return response.handleSuccessResponse(await Users.findAll());
+  async listUsers(accountId) {
+    let users = await Users.findAll({
+      where: {
+        account_id: accountId,
+        is_deleted: 0,
+      },
+      raw: true,
+    });
+    return response.handleSuccessResponseWithData("User list", users);
   }
-  async getInfo(accountId) {
+  async getInfo(userId) {
     let userInfo = await Users.findOne({
       where: {
-        accountId: accountId,
-        accountStatus: 1,
+        user_id: userId,
+        is_deleted: 0,
       },
       attributes: [
-        "accountId",
-        "companyId",
+        "user_id",
+        "first_name",
+        "last_name",
+        "email",
+        "account_id",
         "username",
+        "created_at",
+        "updated_at",
         "address",
         "address2",
-        "email",
-        "firstName",
-        "lastName",
-        "parentId",
       ],
       raw: true,
     });
@@ -109,32 +110,14 @@ class UserService {
     }
     return response.handleNotFoundRequest("User not found");
   }
-  async listUserRoles() {
-    return response.handleSuccessResponse(await UserRoles.findAll());
-  }
-  async listAccounts() {
-    return response.handleSuccessResponse(await Accounts.findAll());
-  }
-  async listAccountRoles() {
-    return response.handleSuccessResponse(await AccountRoles.findAll());
-  }
-  async listBins() {
-    return response.handleSuccessResponse(await Bins.findAll());
-  }
-  async listCategories() {
-    return response.handleSuccessResponse(await Categories.findAll());
-  }
   async listCompanies() {
-    return response.handleSuccessResponse(await Companies.findAll());
-  }
-  async listDevices() {
-    return response.handleSuccessResponse(await Devices.findAll());
-  }
-  async listLocations() {
-    return response.handleSuccessResponse(await Locations.findAll());
-  }
-  async listMealCount() {
-    return response.handleSuccessResponse(await MealCount.findAll());
+    let companies = await Companies.findAll({
+      where: {
+        is_deleted: 0,
+      },
+      raw: true,
+    });
+    return response.handleSuccessResponseWithData("Companies list", companies);
   }
 }
 module.exports = new UserService();
