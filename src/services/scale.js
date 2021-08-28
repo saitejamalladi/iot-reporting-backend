@@ -1,3 +1,5 @@
+const db = require("../models/scales");
+const sequelize = db.sequelize;
 const Accounts = require("../models/users").Accounts;
 const RegisteredDevices = require("../models/scales").RegisteredDevices;
 const Scales = require("../models/scales").Scales;
@@ -70,6 +72,46 @@ class ScaleService {
       raw: true,
     });
     return response.handleSuccessResponseWithData("Scales list", scales);
+  }
+  async report() {
+    let dailyData = await sequelize.query(
+      "select location, DATE_FORMAT(created_at, '%Y-%m-%d') as report_date, " +
+        "sum(net_weight) as total_weight " +
+        "from scale_data sd " +
+        "where created_at >= DATE(NOW()) - INTERVAL 7 DAY and created_at < DATE(NOW()) " +
+        "group by location, DATE_FORMAT(created_at, '%Y-%m-%d') " +
+        "order by DATE_FORMAT(created_at, '%Y-%m-%d')",
+      {
+        replacements: {},
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    let Day28Avg = await sequelize.query(
+      "select location, sum(net_weight)/count(1) as average_weight " +
+        "from scale_data sd where created_at >= DATE(NOW()) - INTERVAL 28 DAY " +
+        "and created_at < DATE(NOW()) " +
+        "group by location",
+      {
+        replacements: {},
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    let Day7Avg = await sequelize.query(
+      "select location, sum(net_weight)/count(1) as average_weight " +
+        "from scale_data sd where created_at >= DATE(NOW()) - INTERVAL 7 DAY " +
+        "and created_at < DATE(NOW()) " +
+        "group by location",
+      {
+        replacements: {},
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    let resData = {
+      daily_data: dailyData,
+      day_28_avg: Day28Avg,
+      day_7_avg: Day7Avg,
+    };
+    return response.handleSuccessResponseWithData("Report", resData);
   }
   async update(scaleObj) {
     await Scales.update(

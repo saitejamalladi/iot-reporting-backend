@@ -61,6 +61,19 @@ class ScaleController {
       return next(err);
     }
   }
+  async report(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json(response.handleValidationError(errors.array()));
+        return;
+      }
+      let responseObj = await scaleService.report();
+      res.status(responseObj.status_code).json(responseObj);
+    } catch (err) {
+      return next(err);
+    }
+  }
   async delete(req, res, next) {
     try {
       const errors = validationResult(req);

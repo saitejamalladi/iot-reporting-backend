@@ -23,6 +23,11 @@ router.get(
   scaleController.listAll
 );
 router.get(
+  "/report",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next),
+  scaleController.report
+);
+router.get(
   "/list/:device_id",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   scaleController.list
