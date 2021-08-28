@@ -255,6 +255,26 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+  /user/list:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "user"
+      summary: To get the list of users based on token account_id
+      responses:
+        200:
+          description: User info
+          schema:
+            $ref: "#/definitions/GetUserListResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
   /device/register:
     post:
       security:
@@ -816,6 +836,44 @@ definitions:
         example: Password@2021
     xml:
       name: "PutResetPasswordRequest"
+  GetUserListResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            user_id:
+              type: string
+            first_name:
+              type: string
+              example: "bob"
+            last_name:
+              type: string
+              example: "the builder"
+            email:
+              type: string
+              example: "bob@test.com"
+            username:
+              type: string
+              example: "bob"
+            account_id:
+              type: string
+            address:
+              type: string
+              example: "somewhere"
+            address2:
+              type: string
+              example: "somehow"
+    xml:
+      name: "GetUserListResponse"
   GetUserInfoResponse:
     type: object
     properties:

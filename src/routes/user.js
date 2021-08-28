@@ -26,7 +26,11 @@ router.get(
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   userController.getInfo
 );
-router.get("/list", userController.listUsers);
+router.get(
+  "/list",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next),
+  userController.listUsers
+);
 router.get("/company", userController.listCompanies);
 
 module.exports = router;
