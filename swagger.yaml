@@ -295,27 +295,6 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
-  /device/register:
-    post:
-      security:
-        - Bearer: [ ]
-      tags:
-        - "device"
-      summary: To register the device
-      description: This API registers the device
-      responses:
-        200:
-          description: The generated jwt token.
-          schema:
-            $ref: "#/definitions/PostRegisterDeviceResponse"
-        400:
-          description: Something wrong in the body.
-          schema:
-            $ref: "#/definitions/GenericResponse"
-        401:
-          description: Invalid credentials
-          schema:
-            $ref: "#/definitions/GenericResponse"
   /device/list:
     get:
       security:
@@ -954,22 +933,6 @@ definitions:
             example: "somehow"
     xml:
       name: "GetUserInfoResponse"
-  PostRegisterDeviceResponse:
-    type: object
-    properties:
-      is_error:
-        type: boolean
-      status_code:
-        type: integer
-      display_msg:
-        type: string
-      res_data:
-        type: object
-        properties:
-          device_id:
-            type: string
-    xml:
-      name: "PostRegisterDeviceResponse"
   GetDeviceListResponse:
     type: object
     properties:

@@ -8,8 +8,21 @@ const randomKey = require("../utils/randomKey");
 const response = require("../utils/response");
 
 class ScaleService {
-  async create(scaleObj) {
+  async create(scaleObj, accountId) {
     let scaleId = await randomKey.generate(6);
+    let deviceExists = await RegisteredDevices.count({
+      where: {
+        device_id: scaleObj["device_id"],
+        account_id: accountId,
+        is_deleted: 0,
+      },
+    });
+    if (!deviceExists) {
+      await RegisteredDevices.create({
+        device_id: scaleObj["device_id"],
+        account_id: accountId,
+      });
+    }
     await Scales.create({
       scale_id: scaleId,
       device_id: scaleObj["device_id"],
