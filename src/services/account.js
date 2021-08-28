@@ -1,6 +1,8 @@
 const Accounts = require("../models/users").Accounts;
 const randomKey = require("../utils/randomKey");
 const response = require("../utils/response");
+const db = require("../models/users");
+const sequelize = db.sequelize;
 
 class AccountService {
   async create(account) {
@@ -22,6 +24,26 @@ class AccountService {
       resData
     );
   }
+  async getInfo(accountId) {
+    let accountInfo = await sequelize.query(
+      "select account_id, name, (select count(1) from accounts where " +
+        "parent_account = ac1.account_id and is_deleted = 0) child_account " +
+        "from accounts ac1 where account_id = :account_id and is_deleted = 0",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    if (accountInfo) {
+      return response.handleSuccessResponseWithData(
+        "Account info",
+        accountInfo
+      );
+    }
+    return response.handleNotFoundRequest("Account not found");
+  }
   async list() {
     let accounts = await Accounts.findAll({
       where: {
@@ -32,13 +54,17 @@ class AccountService {
     return response.handleSuccessResponseWithData("Accounts  list", accounts);
   }
   async listChildAccounts(accountId) {
-    let childAccounts = await Accounts.findAll({
-      where: {
-        parent_account: accountId,
-        is_deleted: 0,
-      },
-      raw: true,
-    });
+    let childAccounts = await sequelize.query(
+      "select account_id, name, (select count(1) from accounts where " +
+        "parent_account = ac1.account_id and is_deleted = 0) child_account " +
+        "from accounts ac1 where parent_account = :account_id and is_deleted = 0",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
     return response.handleSuccessResponseWithData(
       "Child Accounts",
       childAccounts

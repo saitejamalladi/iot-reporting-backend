@@ -116,6 +116,26 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+  /account/info:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "account"
+      summary: To get the account info based on token account_id
+      responses:
+        200:
+          description: Account info
+          schema:
+            $ref: "#/definitions/GetAccountInfoResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
   /user/company:
     get:
       tags:
@@ -709,6 +729,28 @@ definitions:
               type: string
     xml:
       name: "GetCompanyListResponse"
+  GetAccountInfoResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            account_id:
+              type: string
+            name:
+              type: string
+            child_account:
+              type: string
+    xml:
+      name: "GetAccountInfoResponse"
   GetAccountListResponse:
     type: object
     properties:
@@ -725,7 +767,9 @@ definitions:
           properties:
             account_id:
               type: string
-            company_id:
+            name:
+              type: string
+            child_account:
               type: string
     xml:
       name: "GetAccountListResponse"
@@ -747,7 +791,7 @@ definitions:
               type: string
             company_id:
               type: string
-            parent_id:
+            parent_account:
               type: string
     xml:
       name: "GetChildAccountListResponse"

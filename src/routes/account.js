@@ -13,6 +13,11 @@ router.post(
 );
 router.get("", accountController.list);
 router.get(
+  "/info",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next),
+  accountController.getInfo
+);
+router.get(
   "/child/:account_id",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   accountController.listChildAccounts
