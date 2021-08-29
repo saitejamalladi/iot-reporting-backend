@@ -37,22 +37,36 @@ class ScaleService {
     return response.handleSuccessResponseWithData("Scale added", resData);
   }
   async listAll(accountId) {
-    let scales = await Scales.findAll({
-      where: {
-        is_deleted: 0,
-      },
-      include: [
-        {
-          model: RegisteredDevices,
-          required: false,
-          where: {
-            account_id: accountId,
-          },
-          attributes: [],
+    // let scales = await Scales.findAll({
+    //   where: {
+    //     is_deleted: 0,
+    //   },
+    //   include: [
+    //     {
+    //       model: RegisteredDevices,
+    //       where: {
+    //         account_id: accountId,
+    //       },
+    //       attributes: [],
+    //     },
+    //   ],
+    //   raw: true,
+    // });
+    let scales = await sequelize.query(
+      " SELECT `Scales`.`id_scales`, `Scales`.`scale_id`, `Scales`.`name`, " +
+        "`Scales`.`serial_num`, `Scales`.`device_id`, `Scales`.`created_at`, " +
+        "`Scales`.`updated_at`, `Scales`.`is_deleted` " +
+        "FROM `scales` AS `Scales` INNER JOIN `registered_devices` " +
+        "AS `RegisteredDevice` ON `Scales`.`device_id` = `RegisteredDevice`.`device_id` " +
+        "AND `RegisteredDevice`.`account_id` = :account_id WHERE `Scales`.`is_deleted` = 0",
+      {
+        replacements: {
+          account_id: accountId,
         },
-      ],
-      raw: true,
-    });
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
     return response.handleSuccessResponseWithData("Scales list", scales);
   }
   async list(deviceId) {
