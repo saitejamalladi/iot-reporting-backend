@@ -6,14 +6,27 @@ const sequelize = db.sequelize;
 
 class AccountService {
   async create(account) {
+    let parentAccount = null;
+    let companyId = account["company_id"];
+    if (account["parent_account"]) {
+      parentAccount = account["parent_account"];
+      let parentAccountInfo = await Accounts.findOne({
+        where: {
+          account_id: account["parent_account"],
+        },
+        raw: true,
+      });
+      if (!parentAccountInfo) {
+        return response.handleBadRequest("Parent Account Doesn`t exists");
+      }
+      parentAccount = parentAccountInfo["account_id"];
+      companyId = parentAccountInfo["company_id"];
+    }
     let accountId = await randomKey.generate(6);
-    let parentAccount = account["parent_account"]
-      ? account["parent_account"]
-      : null;
     await Accounts.create({
       account_id: accountId,
       name: account["name"],
-      company_id: account["company_id"],
+      company_id: companyId,
       parent_account: parentAccount,
     });
     let resData = {

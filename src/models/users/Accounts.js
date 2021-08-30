@@ -11,6 +11,7 @@ module.exports = function (sequelize, DataTypes) {
       account_id: {
         type: DataTypes.STRING,
         unique: true,
+        allowNull: false,
       },
       name: {
         type: DataTypes.STRING,

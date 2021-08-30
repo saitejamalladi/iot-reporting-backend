@@ -6,9 +6,19 @@ class AccountMiddleware {
     switch (method) {
       case constants.VALIDATIONS.CREATE: {
         return [
-          check("company_id", "Missing company_id").exists(),
+          check("company_id").custom((value, { req }) => {
+            if (req.body.company_id || req.body.parent_account) {
+              return true;
+            }
+            throw new Error("Missing company_id");
+          }),
+          check("parent_account").custom((value, { req }) => {
+            if (req.body.company_id || req.body.parent_account) {
+              return true;
+            }
+            throw new Error("Missing parent_account");
+          }),
           check("name", "Missing name").exists(),
-          check("parent_account", "Missing parent_account").exists(),
         ];
       }
     }
