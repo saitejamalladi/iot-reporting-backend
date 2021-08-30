@@ -8,7 +8,6 @@ class UserMiddleware {
         return [
           check("first_name", "Missing first_name").exists(),
           check("last_name", "Missing last_name").exists(),
-          check("account_id", "Missing account_id").exists(),
           check("email", "Missing email").exists(),
           check("email", "Invalid email").isEmail(),
           check("address", "Missing address").exists(),

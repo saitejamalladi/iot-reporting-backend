@@ -7,6 +7,7 @@ const userController = require("../controllers/user");
 
 router.post(
   "/",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next),
   userMiddleware.validate(constants.VALIDATIONS.REGISTER),
   userController.register
 );

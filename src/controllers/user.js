@@ -11,7 +11,10 @@ class UserController {
         res.status(400).json(response.handleValidationError(errors.array()));
         return;
       }
-      let responseObj = await userService.register(req.body);
+      let responseObj = await userService.register(
+        req.body,
+        req.tokenInfo[constants.ACCOUNT_ID]
+      );
       res.status(responseObj.status_code).json(responseObj);
     } catch (err) {
       return next(err);

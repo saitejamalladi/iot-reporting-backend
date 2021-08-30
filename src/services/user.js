@@ -7,8 +7,9 @@ const response = require("../utils/response");
 const randomKey = require("../utils/randomKey");
 
 class UserService {
-  async register(user) {
+  async register(user, accountId) {
     let userId = await randomKey.generate(6);
+    let userAccountId = user["account_id"] || accountId;
     await Users.create({
       user_id: userId,
       first_name: user["first_name"],
@@ -16,7 +17,7 @@ class UserService {
       email: user["email"],
       username: user["username"],
       password: await bcrypt.hash(user["password"], SALT_ROUNDS),
-      account_id: user["account_id"],
+      account_id: userAccountId,
       address: user["address"],
       address2: user["address2"],
     });

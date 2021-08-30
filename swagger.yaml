@@ -183,6 +183,8 @@ paths:
     post:
       tags:
         - "user"
+      security:
+        - Bearer: [ ]
       summary: To register the user
       description: This API registers the user
       parameters:
