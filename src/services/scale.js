@@ -87,16 +87,20 @@ class ScaleService {
     });
     return response.handleSuccessResponseWithData("Scales list", scales);
   }
-  async report() {
+  async report(accountId) {
     let dailyData = await sequelize.query(
       "select location, DATE_FORMAT(created_at, '%Y-%m-%d') as report_date, " +
-        "sum(net_weight) as total_weight " +
-        "from scale_data sd " +
+        "sum(net_weight) as total_weight from scale_data sd " +
         "where created_at >= DATE(NOW()) - INTERVAL 7 DAY and created_at < DATE(NOW()) " +
+        "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+        "and device_id in (select device_id from registered_devices rd " +
+        "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
         "group by location, DATE_FORMAT(created_at, '%Y-%m-%d') " +
-        "order by DATE_FORMAT(created_at, '%Y-%m-%d')",
+        "order by DATE_FORMAT(created_at, '%Y-%m-%d') ",
       {
-        replacements: {},
+        replacements: {
+          account_id: accountId,
+        },
         type: sequelize.QueryTypes.SELECT,
       }
     );
@@ -104,9 +108,14 @@ class ScaleService {
       "select location, sum(net_weight)/count(1) as average_weight " +
         "from scale_data sd where created_at >= DATE(NOW()) - INTERVAL 28 DAY " +
         "and created_at < DATE(NOW()) " +
+        "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+        "and device_id in (select device_id from registered_devices rd " +
+        "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
         "group by location",
       {
-        replacements: {},
+        replacements: {
+          account_id: accountId,
+        },
         type: sequelize.QueryTypes.SELECT,
       }
     );
@@ -114,9 +123,14 @@ class ScaleService {
       "select location, sum(net_weight)/count(1) as average_weight " +
         "from scale_data sd where created_at >= DATE(NOW()) - INTERVAL 7 DAY " +
         "and created_at < DATE(NOW()) " +
+        "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+        "and device_id in (select device_id from registered_devices rd " +
+        "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
         "group by location",
       {
-        replacements: {},
+        replacements: {
+          account_id: accountId,
+        },
         type: sequelize.QueryTypes.SELECT,
       }
     );

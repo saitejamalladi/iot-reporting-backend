@@ -68,7 +68,9 @@ class ScaleController {
         res.status(400).json(response.handleValidationError(errors.array()));
         return;
       }
-      let responseObj = await scaleService.report();
+      let responseObj = await scaleService.report(
+        req.tokenInfo[constants.ACCOUNT_ID]
+      );
       res.status(responseObj.status_code).json(responseObj);
     } catch (err) {
       return next(err);
