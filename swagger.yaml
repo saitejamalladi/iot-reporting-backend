@@ -1,0 +1,1211 @@
+swagger: "2.0"
+
+info:
+  version: 1.0.0
+  title: IOT Reporting APIs
+  description: The IOT Reporting API document is intended strictly for internal use only.
+
+schemes:
+  - http
+host: 34.126.111.208:8080
+basePath: "/api"
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+
+tags:
+  - name: "auth"
+    description: "Token generation"
+  - name: "company"
+    description: "Access to company data"
+  - name: "account"
+    description: "Access to account data"
+  - name: "user"
+    description: "Access to user data"
+  - name: "device"
+    description: "Access to device data"
+  - name: "scales"
+    description: "Access to scales data"
+  - name: "bins"
+    description: "Access to bins data"
+
+paths:
+  /auth/token:
+    post:
+      tags:
+        - "auth"
+      summary: To generate an auth token.
+      description: This API generated the auth token based on client ID, client Secret, user id and app key shared.
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "user object that needs to be shared to generate the token."
+          required: true
+          schema:
+            $ref: "#/definitions/Auth"
+      responses:
+        200:
+          description: The generated jwt token.
+          schema:
+            type: object
+            properties:
+              is_error:
+                type: boolean
+              status_code:
+                type: integer
+              display_msg:
+                type: string
+              res_data:
+                type: object
+                properties:
+                  token:
+                    type: string
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /account:
+    post:
+      tags:
+        - "account"
+      security:
+        - Bearer: [ ]
+      summary: To create an account
+      description: This API registers the account
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "account object that needs to be registered"
+          required: true
+          schema:
+            $ref: "#/definitions/PostRegisterAccountRequest"
+      responses:
+        200:
+          description: Account registration successful
+          schema:
+            $ref: "#/definitions/PostRegisterAccountResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    get:
+      tags:
+        - "account"
+      summary: To get the list of registered accounts
+      responses:
+        200:
+          description: Account list
+          schema:
+            $ref: "#/definitions/GetAccountListResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /account/info:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "account"
+      summary: To get the account info based on token account_id
+      responses:
+        200:
+          description: Account info
+          schema:
+            $ref: "#/definitions/GetAccountInfoResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /user/company:
+    get:
+      tags:
+        - "company"
+      summary: To get the registered company list
+      responses:
+        200:
+          description: Company
+          schema:
+            $ref: "#/definitions/GetCompanyListResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /account/child/{account_id}:
+    get:
+      tags:
+        - "account"
+      security:
+        - Bearer: [ ]
+      summary: To get the list of child accounts
+      parameters:
+        - in: "path"
+          name: "account_id"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Child accounts
+          schema:
+            $ref: "#/definitions/GetChildAccountListResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /user:
+    post:
+      tags:
+        - "user"
+      security:
+        - Bearer: [ ]
+      summary: To register the user
+      description: This API registers the user
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "user object that needs to be registered"
+          required: true
+          schema:
+            $ref: "#/definitions/PostRegisterUserRequest"
+      responses:
+        200:
+          description: User registration successful
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    put:
+      tags:
+        - "user"
+      security:
+        - Bearer: [ ]
+      summary: To update the user
+      description: This API updates the user profile
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "user object that needs to be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/PutUpdateUserRequest"
+      responses:
+        200:
+          description: User updated successfully
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "user"
+      summary: To get the user info based on token user_id
+      responses:
+        200:
+          description: User info
+          schema:
+            $ref: "#/definitions/GetUserInfoResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /user/reset-password:
+    put:
+      tags:
+        - "user"
+      summary: To reset the password
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/PutResetPasswordRequest"
+      responses:
+        200:
+          description: Password updated successfully
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /user/list:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "user"
+      summary: To get the list of users based on token account_id
+      responses:
+        200:
+          description: User info
+          schema:
+            $ref: "#/definitions/GetUserListResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /device/list:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "device"
+      summary: To get the list of devices
+      responses:
+        200:
+          description: Registered Devices list
+          schema:
+            $ref: "#/definitions/GetDeviceListResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /scale/:
+    post:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To add a scale
+      description: This API adds the scale
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "scale object that needs to be created"
+          required: true
+          schema:
+            $ref: "#/definitions/PostAddScaleRequest"
+      responses:
+        200:
+          description: Scale added successfully
+          schema:
+            $ref: "#/definitions/PostAddScaleResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    put:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To update a scale
+      description: This API updates the scale
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "scale object that needs to be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/PutUpdateScaleRequest"
+      responses:
+        200:
+          description: Scale updated successfully
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /scale/list/{device_id}:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To get the list of scales
+      parameters:
+        - in: "path"
+          name: "device_id"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Scales list
+          schema:
+            $ref: "#/definitions/GetScalesResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /scale/report:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To get the report
+      responses:
+        200:
+          description: Scales list
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /scale/{scale_id}:
+    delete:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To delete a scale based on scale_id
+      parameters:
+        - in: "path"
+          name: "scale_id"
+          description: "The scale_id to be delete"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Scale removed
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /scale/config:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To get the config
+      responses:
+        200:
+          description: Scale Config
+          schema:
+            $ref: "#/definitions/GetScaleConfigResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+
+  /scale/data:
+    post:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To add data to a scale
+      description: This API adds data to the scale
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "scale data that needs to be created"
+          required: true
+          schema:
+            $ref: "#/definitions/PostAddScaleDataRequest"
+      responses:
+        200:
+          description: Scale data added successfully
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /scale/data/{scale_id}:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To get the list of scale data
+      parameters:
+        - in: "path"
+          name: "scale_id"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Scale data list
+          schema:
+            $ref: "#/definitions/GetScalesDataResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /scale/data/{id_scale_data}:
+    delete:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To delete a scale based on id_scale_data
+      parameters:
+        - in: "path"
+          name: "id_scale_data"
+          description: "The id_scale_data to be deleted"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Scale removed
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /bin/:
+    post:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "bins"
+      summary: To add a bin
+      description: This API adds the bin
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "bin object that needs to be created"
+          required: true
+          schema:
+            $ref: "#/definitions/PostAddBinRequest"
+      responses:
+        200:
+          description: Bin added successfully
+          schema:
+            $ref: "#/definitions/PostAddBinResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    put:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "bins"
+      summary: To update a bin
+      description: This API updates the bin
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "bin object that needs to be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/PutUpdateBinRequest"
+      responses:
+        200:
+          description: Bin updated successfully
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "bins"
+      summary: To get the list of bins
+      responses:
+        200:
+          description: Bins list
+          schema:
+            $ref: "#/definitions/GetBinsResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /bin/{bin_id}:
+    delete:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "bins"
+      summary: To delete a bin based on bin_id
+      parameters:
+        - in: "path"
+          name: "bin_id"
+          description: "The bin_id to be deleted"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Bin removed
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+
+definitions:
+  GenericResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+    xml:
+      name: "GenericResponse"
+  Auth:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+        example: ajdfhky12o83uwkjhfi
+        description: user id of the user.
+      password:
+        type: string
+        example: ajdfhky12o83uwkjhfi
+        description:  password of the user.
+    xml:
+      name: "Auth"
+
+  PostRegisterAccountRequest:
+    type: object
+    required:
+      - company_id
+      - name
+      - parent_account
+    properties:
+      company_id:
+        type: string
+      name:
+        type: string
+        example: Australia
+      parent_account:
+        type: string
+        example: acc_1
+    xml:
+      name: "PostRegisterAccountRequest"
+  PostRegisterAccountResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          account_id:
+            type: string
+    xml:
+      name: "PostRegisterAccountResponse"
+  GetCompanyListResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            company_id:
+              type: string
+            name:
+              type: string
+            created_at:
+              type: string
+            updated_at:
+              type: string
+    xml:
+      name: "GetCompanyListResponse"
+  GetAccountInfoResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            account_id:
+              type: string
+            name:
+              type: string
+            child_account:
+              type: string
+    xml:
+      name: "GetAccountInfoResponse"
+  GetAccountListResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            account_id:
+              type: string
+            name:
+              type: string
+            child_account:
+              type: string
+    xml:
+      name: "GetAccountListResponse"
+  GetChildAccountListResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            account_id:
+              type: string
+            company_id:
+              type: string
+            parent_account:
+              type: string
+    xml:
+      name: "GetChildAccountListResponse"
+  PostRegisterUserRequest:
+    type: object
+    required:
+      - first_name
+      - last_name
+      - email
+      - address
+      - address2
+      - username
+      - password
+      - confirm_password
+      - account_id
+    properties:
+      first_name:
+        type: string
+        example: John
+      last_name:
+        type: string
+        example: Doe
+      email:
+        type: string
+        example: john@jon.com
+      account_id:
+        type: string
+      username:
+        type: string
+        example: john.doe
+      password:
+        type: string
+        example: Password@2021
+      confirm_password:
+        type: string
+        example: Password@2021
+      address:
+        type: string
+        example: Address line 1
+      address2:
+        type: string
+        example: Address line 2
+    xml:
+      name: "PostRegisterUserRequest"
+  PutUpdateUserRequest:
+    type: object
+    required:
+      - first_name
+      - last_name
+      - address
+      - address2
+      - email
+    properties:
+      first_name:
+        type: string
+        example: John
+      last_name:
+        type: string
+        example: Doe
+      address:
+        type: string
+        example: Address line 1
+      address2:
+        type: string
+        example: Address line 2
+      email:
+        type: string
+        example: john@jon.com
+    xml:
+      name: "PutUpdateUserRequest"
+  PutResetPasswordRequest:
+    type: object
+    required:
+      - username
+      - password
+      - confirm_password
+    properties:
+      username:
+        type: string
+        example: john.doe
+      password:
+        type: string
+        example: Password@2021
+      confirm_password:
+        type: string
+        example: Password@2021
+    xml:
+      name: "PutResetPasswordRequest"
+  GetUserListResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            user_id:
+              type: string
+            first_name:
+              type: string
+              example: "bob"
+            last_name:
+              type: string
+              example: "the builder"
+            email:
+              type: string
+              example: "bob@test.com"
+            username:
+              type: string
+              example: "bob"
+            account_id:
+              type: string
+            address:
+              type: string
+              example: "somewhere"
+            address2:
+              type: string
+              example: "somehow"
+    xml:
+      name: "GetUserListResponse"
+  GetUserInfoResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          user_id:
+            type: string
+          first_name:
+            type: string
+            example: "bob"
+          last_name:
+            type: string
+            example: "the builder"
+          email:
+            type: string
+            example: "bob@test.com"
+          username:
+            type: string
+            example: "bob"
+          account_id:
+            type: string
+          address:
+            type: string
+            example: "somewhere"
+          address2:
+            type: string
+            example: "somehow"
+    xml:
+      name: "GetUserInfoResponse"
+  GetDeviceListResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          device_id:
+            type: integer
+          account_id:
+            type: integer
+          created_at:
+            type: string
+          updated_at:
+            type: string
+    xml:
+      name: "GetDeviceListResponse"
+  PostAddScaleRequest:
+    type: object
+    properties:
+      name:
+        type: string
+      device_id:
+        type: string
+      serial_num:
+        type: string
+    xml:
+      name: "PostAddScaleRequest"
+  PostAddScaleDataRequest:
+    type: object
+    properties:
+      scale_id:
+        type: string
+      bin_id:
+        type: string
+      gross_weight:
+        type: number
+      net_weight:
+        type: number
+      service:
+        type: string
+      category:
+        type: string
+      sub_category1:
+        type: string
+      sub_category2:
+        type: string
+      location:
+        type: string
+      service_waste:
+        type: string
+    xml:
+      name: "PostAddScaleDataRequest"
+  PostAddScaleResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          scale_id:
+            type: string
+    xml:
+      name: "PostAddScaleResponse"
+  PutUpdateScaleRequest:
+    type: object
+    properties:
+      name:
+        type: string
+      scale_id:
+        type: string
+      serial_num:
+        type: string
+    xml:
+      name: "PutUpdateScaleRequest"
+  GetListScaleRequest:
+    type: object
+    properties:
+      device_id:
+        type: string
+    xml:
+      name: "GetListScaleRequest"
+  GetScalesResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            scale_id:
+              type: string
+            name:
+              type: string
+            serial_num:
+              type: string
+            device_id:
+              type: string
+            created_at:
+              type: string
+            updated_at:
+              type: string
+    xml:
+      name: "GetScalesResponse"
+  GetScaleConfigResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            service:
+              type: array
+              items:
+                type: string
+            service_waste:
+              type: array
+              items:
+                type: string
+    xml:
+      name: "GetScaleConfigResponse"
+  GetScalesDataResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            id_scale_data:
+              type: integer
+            scale_id:
+              type: string
+            gross_weight:
+              type: number
+            net_weight:
+              type: number
+            bin_id:
+              type: string
+            service:
+              type: string
+            category:
+              type: string
+            sub_category1:
+              type: string
+            sub_category2:
+              type: string
+            location:
+              type: string
+            service_waste:
+              type: string
+            created_at:
+              type: string
+            updated_at:
+              type: string
+    xml:
+      name: "GetScalesDataResponse"
+  PostAddBinRequest:
+    type: object
+    properties:
+      name:
+        type: string
+      weight:
+        type: number
+      max_weight:
+        type: number
+    xml:
+      name: "PostAddBinRequest"
+  PostAddBinResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          bin_id:
+            type: string
+    xml:
+      name: "PostAddBinResponse"
+  PutUpdateBinRequest:
+    type: object
+    properties:
+      bin_id:
+        type: string
+      name:
+        type: string
+      weight:
+        type: number
+      max_weight:
+        type: number
+    xml:
+      name: "PutUpdateScaleRequest"
+  GetBinsResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            bin_id:
+              type: string
+            name:
+              type: string
+            weight:
+              type: number
+            max_weight:
+              type: number
+            created_at:
+              type: string
+            updated_at:
+              type: string
+    xml:
+      name: "GetBinsResponse"

@@ -1,0 +1,7 @@
+module.exports = {
+  CREATE: "CREATE",
+  ADD_DATA: "ADD_DATA",
+  REGISTER: "REGISTER",
+  UPDATE: "UPDATE",
+  RESET_PASSWORD: "RESET_PASSWORD",
+};
