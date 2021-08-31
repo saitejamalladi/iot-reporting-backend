@@ -9,6 +9,7 @@ class ScaleMiddleware {
           check("name", "Missing name").exists(),
           check("serial_num", "Missing email").exists(),
           check("device_id", "Missing device_id").exists(),
+          check("location","Missing location").exists(),
         ];
       }
       case constants.VALIDATIONS.UPDATE: {

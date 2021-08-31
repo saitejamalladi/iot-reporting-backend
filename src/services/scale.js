@@ -30,6 +30,7 @@ class ScaleService {
       device_id: scaleObj["device_id"],
       name: scaleObj["name"],
       serial_num: scaleObj["serial_num"],
+      location: scaleObj["location"],
     });
     let resData = {
       scale_id: scaleId,

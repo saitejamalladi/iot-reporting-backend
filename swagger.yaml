@@ -986,6 +986,8 @@ definitions:
         type: string
       serial_num:
         type: string
+      location:
+        type: string
     xml:
       name: "PostAddScaleRequest"
   PostAddScaleDataRequest:

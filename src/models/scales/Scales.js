@@ -40,6 +40,10 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         defaultValue: 0,
       },
+      location: {
+        type: DataTypes.STRING,
+        allowNull: true
+      }
     },
     {
       sequelize,
