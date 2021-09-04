@@ -1,5 +1,6 @@
 const Users = require("../models/users").Users;
 const Companies = require("../models/users").Companies;
+const Permissions = require("../models/users").Permissions;
 const bcrypt = require("bcrypt");
 const constants = require("../constants");
 const SALT_ROUNDS = constants.BCRYPT_SALT_ROUNDS;
@@ -20,6 +21,7 @@ class UserService {
       account_id: userAccountId,
       address: user["address"],
       address2: user["address2"],
+      role: user["role"],
     });
     return response.handleSuccessResponse("User registered successfully");
   }
@@ -103,6 +105,7 @@ class UserService {
         "updated_at",
         "address",
         "address2",
+        "role",
       ],
       raw: true,
     });
@@ -119,6 +122,15 @@ class UserService {
       raw: true,
     });
     return response.handleSuccessResponseWithData("Companies list", companies);
+  }
+
+  async listPermissions(roleName){
+    let permissions = await Permissions.findAll({
+      where: {
+        rolename : roleName
+      }
+    });
+    return response.handleSuccessResponseWithData("Permissions list", permissions);
   }
 }
 module.exports = new UserService();

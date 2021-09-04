@@ -8,5 +8,5 @@ module.exports = {
   ACCOUNT_NAME: "ACCOUNT_NAME",
   USER_ID: "USER_ID",
   VALIDATIONS: validations,
-  ROLES: roles,
+  ROLES: "ROLE",
 };
