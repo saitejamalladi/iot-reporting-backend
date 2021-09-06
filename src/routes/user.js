@@ -34,4 +34,10 @@ router.get(
 );
 router.get("/company", userController.listCompanies);
 
+router.get(
+  "/permissions",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next),
+  userController.listPermissions
+);
+
 module.exports = router;

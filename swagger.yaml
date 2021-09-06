@@ -297,6 +297,27 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+  /user/permission:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "user"
+      summary: To get the list of a users permissions based on token role
+      responses:
+        200:
+          description: User info
+          schema:
+            $ref: "#/definitions/ListPermissionsResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  
   /device/list:
     get:
       security:
@@ -953,6 +974,9 @@ definitions:
           address2:
             type: string
             example: "somehow"
+          role:
+            type: string || null
+            example: "user || null"
     xml:
       name: "GetUserInfoResponse"
   GetDeviceListResponse:
@@ -985,6 +1009,8 @@ definitions:
       device_id:
         type: string
       serial_num:
+        type: string
+      location:
         type: string
     xml:
       name: "PostAddScaleRequest"
@@ -1209,3 +1235,29 @@ definitions:
               type: string
     xml:
       name: "GetBinsResponse"
+  ListPermissionsResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            permission:
+              type: string
+            rolename:
+              type: string
+            role_id:
+              type: number
+            created_at:
+              type: string
+            updated_at:
+              type: string
+    xml:
+      name: "ListPermissionsResponse"
