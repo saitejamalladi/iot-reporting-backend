@@ -25,10 +25,10 @@ class UserService {
     });
     return response.handleSuccessResponse("User registered successfully");
   }
-  async update(user, userId) {
+  async update(user) {
     let userInfo = Users.findOne({
       where: {
-        user_id: userId,
+        id_users: user["id_users"],
         is_deleted: 0,
       },
       raw: true,
@@ -46,7 +46,7 @@ class UserService {
         },
         {
           where: {
-            user_id: userId,
+            id_users: user["id_users"],
             is_deleted: 0,
           },
         }

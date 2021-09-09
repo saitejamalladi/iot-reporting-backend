@@ -861,6 +861,7 @@ definitions:
   PutUpdateUserRequest:
     type: object
     required:
+      - id_users
       - first_name
       - last_name
       - account_id
@@ -869,6 +870,9 @@ definitions:
       - address2
       - email
     properties:
+      id_users:
+        type: integer
+        example: 76
       first_name:
         type: string
         example: John

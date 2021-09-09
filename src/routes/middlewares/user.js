@@ -28,6 +28,7 @@ class UserMiddleware {
       }
       case constants.VALIDATIONS.UPDATE: {
         return [
+          check("id_users","missing id_users").exists(),
           check("first_name", "Missing first_name").exists(),
           check("last_name", "Missing last_name").exists(),
           check("address", "Missing address").exists(),

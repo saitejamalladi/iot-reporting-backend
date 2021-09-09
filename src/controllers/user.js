@@ -28,8 +28,7 @@ class UserController {
         return;
       }
       let responseObj = await userService.update(
-        req.body,
-        req.tokenInfo[constants.USER_ID]
+        req.body
       );
       res.status(responseObj.status_code).json(responseObj);
     } catch (err) {
