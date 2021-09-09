@@ -863,6 +863,8 @@ definitions:
     required:
       - first_name
       - last_name
+      - account_id
+      - role
       - address
       - address2
       - email
@@ -873,6 +875,12 @@ definitions:
       last_name:
         type: string
         example: Doe
+      account_id:
+        type: string
+        example: Compass_1
+      role:
+        type: string
+        example: administrator
       address:
         type: string
         example: Address line 1

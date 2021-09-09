@@ -39,6 +39,8 @@ class UserService {
           first_name: user["first_name"],
           last_name: user["last_name"],
           email: user["email"],
+          account_id: user["account_id"],
+          role: user["role"],
           address: user["address"],
           address2: user["address2"],
         },

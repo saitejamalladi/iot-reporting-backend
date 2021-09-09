@@ -34,6 +34,8 @@ class UserMiddleware {
           check("address2", "Missing address2").exists(),
           check("email", "Missing email").exists(),
           check("email", "Invalid email").isEmail(),
+          check("role","Missing role").exists(),
+          check("account_id","Missing account").exists(),
         ];
       }
       case constants.VALIDATIONS.RESET_PASSWORD: {
