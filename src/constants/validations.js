@@ -1,5 +1,6 @@
 module.exports = {
   CREATE: "CREATE",
+  DELETE: "DELETE",
   ADD_DATA: "ADD_DATA",
   REGISTER: "REGISTER",
   UPDATE: "UPDATE",
