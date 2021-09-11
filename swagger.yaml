@@ -719,7 +719,7 @@ paths:
         - Bearer: [ ]
       tags:
         - "location"
-      summary: To delete a bin based on location name
+      summary: To delete a location based on location name
       parameters:
         - in: "path"
           name: "location"
