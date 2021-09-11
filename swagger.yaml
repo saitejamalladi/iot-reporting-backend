@@ -1174,6 +1174,8 @@ definitions:
               type: string
             updated_at:
               type: string
+            location:
+              type: string
     xml:
       name: "GetScalesResponse"
   GetScaleConfigResponse:
