@@ -1,4 +1,5 @@
 const Locations = require("../models/scales").Location;
+const sequelize = require("sequelize");
 const response = require("../utils/response");
 
 class LocationService {
@@ -38,6 +39,7 @@ class LocationService {
     await Locations.update(
         {
             is_deleted: 1,
+            updated_at: sequelize.literal("CURRENT_TIMESTAMP")
         },
         {
         where: {
