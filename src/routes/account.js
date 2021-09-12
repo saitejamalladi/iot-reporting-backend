@@ -11,6 +11,12 @@ router.post(
   accountMiddleware.validate(constants.VALIDATIONS.CREATE),
   accountController.create
 );
+router.put(
+  "",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next),
+  accountMiddleware.validate(constants.VALIDATIONS.UPDATE),
+  accountController.update
+);
 router.get("", accountController.list);
 router.get(
   "/info",

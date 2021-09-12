@@ -1,6 +1,10 @@
+const Accounts = require("../models/users").Accounts;
 const Users = require("../models/users").Users;
 const Companies = require("../models/users").Companies;
 const Permissions = require("../models/users").Permissions;
+const db = require("../models/users");
+const sequelize = db.sequelize;
+
 const bcrypt = require("bcrypt");
 const constants = require("../constants");
 const SALT_ROUNDS = constants.BCRYPT_SALT_ROUNDS;
@@ -81,13 +85,18 @@ class UserService {
   }
 
   async listUsers(accountId) {
-    let users = await Users.findAll({
-      where: {
-        account_id: accountId,
-        is_deleted: 0,
-      },
-      raw: true,
-    });
+    let users = await sequelize.query(
+      "select u.*, a.name as account_name from users u, accounts a " +
+        "where u.account_id = a.account_id and u.is_deleted = 0 and a.is_deleted = 0 " +
+        "and a.company_id in (select company_id from accounts " +
+        "where account_id = :account_id and is_deleted = 0)",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
     return response.handleSuccessResponseWithData("User list", users);
   }
   async getInfo(userId) {
@@ -133,6 +142,17 @@ class UserService {
       }
     });
     return response.handleSuccessResponseWithData("Permissions list", permissions);
+  }
+  async delete(username){
+    await Users.update({
+      is_deleted: 1,
+    }, {
+      where: {
+        username : username,
+        is_deleted: 0,
+      }
+    });
+    return response.handleSuccessResponse("User deleted Successfully");
   }
 }
 module.exports = new UserService();

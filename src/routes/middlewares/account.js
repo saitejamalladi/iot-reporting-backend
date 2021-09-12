@@ -21,6 +21,12 @@ class AccountMiddleware {
           check("name", "Missing name").exists(),
         ];
       }
+      case constants.VALIDATIONS.UPDATE: {
+        return [
+          check("name", "Missing name").exists(),
+          check("account_id", "Missing account_id").exists(),
+        ];
+      }
     }
   }
 }
