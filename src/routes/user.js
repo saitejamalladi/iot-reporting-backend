@@ -39,5 +39,10 @@ router.get(
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   userController.listPermissions
 );
+router.delete(
+  "/:username",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next),
+  userController.delete
+);
 
 module.exports = router;

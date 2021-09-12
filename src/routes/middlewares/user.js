@@ -28,12 +28,15 @@ class UserMiddleware {
       }
       case constants.VALIDATIONS.UPDATE: {
         return [
+          check("id_users","missing id_users").exists(),
           check("first_name", "Missing first_name").exists(),
           check("last_name", "Missing last_name").exists(),
           check("address", "Missing address").exists(),
           check("address2", "Missing address2").exists(),
           check("email", "Missing email").exists(),
           check("email", "Invalid email").isEmail(),
+          check("role","Missing role").exists(),
+          check("account_id","Missing account").exists(),
         ];
       }
       case constants.VALIDATIONS.RESET_PASSWORD: {

@@ -17,6 +17,19 @@ class AccountController {
       return next(err);
     }
   }
+  async update(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json(response.handleValidationError(errors.array()));
+        return;
+      }
+      let responseObj = await accountService.update(req.body);
+      res.status(responseObj.status_code).json(responseObj);
+    } catch (err) {
+      return next(err);
+    }
+  }
   async list(req, res, next) {
     try {
       const errors = validationResult(req);

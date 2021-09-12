@@ -99,6 +99,33 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+    put:
+      tags:
+        - "account"
+      security:
+        - Bearer: [ ]
+      summary: To update an account
+      description: This API updates the account
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "account object that needs to be registered"
+          required: true
+          schema:
+            $ref: "#/definitions/PutRegisterAccountRequest"
+      responses:
+        200:
+          description: Account updated successful
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
     get:
       tags:
         - "account"
@@ -727,6 +754,20 @@ definitions:
             type: string
     xml:
       name: "PostRegisterAccountResponse"
+  PutRegisterAccountRequest:
+    type: object
+    required:
+      - company_id
+      - name
+      - parent_account
+    properties:
+      account_id:
+        type: string
+      name:
+        type: string
+        example: Australia
+    xml:
+      name: "PutRegisterAccountRequest"
   GetCompanyListResponse:
     type: object
     properties:
@@ -861,18 +902,30 @@ definitions:
   PutUpdateUserRequest:
     type: object
     required:
+      - id_users
       - first_name
       - last_name
+      - account_id
+      - role
       - address
       - address2
       - email
     properties:
+      id_users:
+        type: integer
+        example: 76
       first_name:
         type: string
         example: John
       last_name:
         type: string
         example: Doe
+      account_id:
+        type: string
+        example: Compass_1
+      role:
+        type: string
+        example: administrator
       address:
         type: string
         example: Address line 1

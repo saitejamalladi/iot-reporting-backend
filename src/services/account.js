@@ -37,6 +37,17 @@ class AccountService {
       resData
     );
   }
+  async update(account) {
+    await Accounts.update({
+      name: account["name"],
+    }, {
+      where: {
+        account_id: account.account_id,
+        is_deleted: 0
+      }
+    });
+    return response.handleSuccessResponse("Account updated successfully");
+  }
   async getInfo(accountId) {
     let accountInfo = await sequelize.query(
       "select account_id, name, (select count(1) from accounts where " +
