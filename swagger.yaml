@@ -31,6 +31,8 @@ tags:
     description: "Access to scales data"
   - name: "bins"
     description: "Access to bins data"
+  - name: "location"
+    description: "Access to location data"
 
 paths:
   /auth/token:
@@ -691,6 +693,79 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+  /location/:
+    post:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "location"
+      summary: To add a location
+      description: This API adds the location
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "location object that needs to be created"
+          required: true
+          schema:
+            $ref: "#/definitions/PostAddLocationRequest"
+      responses:
+        200:
+          description: location added successfully
+          schema:
+            $ref: "#/definitions/PostAddLocationResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "location"
+      summary: To get the list of locations
+      responses:
+        200:
+          description: location list
+          schema:
+            $ref: "#/definitions/GetLocationResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /location/{location}:
+    delete:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "location"
+      summary: To delete a location based on location name
+      parameters:
+        - in: "path"
+          name: "location"
+          description: "The location to be deleted"
+          required: true
+          type: string
+      responses:
+        200:
+          description: location removed
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
 
 definitions:
   GenericResponse:
@@ -1152,6 +1227,8 @@ definitions:
               type: string
             updated_at:
               type: string
+            location:
+              type: string
     xml:
       name: "GetScalesResponse"
   GetScaleConfigResponse:
@@ -1314,3 +1391,44 @@ definitions:
               type: string
     xml:
       name: "ListPermissionsResponse"
+  PostAddLocationRequest:
+    type: object
+    properties:
+      location:
+        type: string
+    xml:
+      name: "PostAddLocationRequest"
+  PostAddLocationResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          success:
+            type: boolean
+    xml:
+      name: "PostAddLocationResponse"
+  GetLocationResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            location:
+              type: string
+    xml:
+      name: "GetLocationResponse"

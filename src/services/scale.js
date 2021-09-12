@@ -83,6 +83,7 @@ class ScaleService {
         "device_id",
         "created_at",
         "updated_at",
+        "location",
       ],
       raw: true,
     });
