@@ -347,13 +347,19 @@ paths:
           schema:
             $ref: "#/definitions/GenericResponse"
   
-  /device/list:
+  /device/list/{account_id}:
     get:
       security:
         - Bearer: [ ]
       tags:
         - "device"
       summary: To get the list of devices
+      parameters:
+        - in: "path"
+          name: "account_id"
+          required: true
+          type: string
+       
       responses:
         200:
           description: Registered Devices list
