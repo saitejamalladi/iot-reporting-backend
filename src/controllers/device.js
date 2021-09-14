@@ -12,7 +12,7 @@ class DeviceController {
         return;
       }
       let responseObj = await deviceService.list(
-        req.tokenInfo[constants.ACCOUNT_ID]
+        req.params["accountId"]
       );
       res.status(responseObj.status_code).json(responseObj);
     } catch (err) {

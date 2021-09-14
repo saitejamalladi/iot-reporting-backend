@@ -4,7 +4,7 @@ const authMiddleware = require("./middlewares/auth");
 const deviceController = require("../controllers/device");
 
 router.get(
-  "/list",
+  "/list/:accountId",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   deviceController.list
 );
