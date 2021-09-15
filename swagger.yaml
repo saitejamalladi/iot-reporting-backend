@@ -434,7 +434,7 @@ paths:
         - Bearer: [ ]
       tags:
         - "scales"
-      summary: To get the list of scales
+      summary: To get the list of scales based on device
       parameters:
         - in: "path"
           name: "device_id"
@@ -459,7 +459,7 @@ paths:
         - Bearer: [ ]
       tags:
         - "scales"
-      summary: To get the list of scales
+      summary: To get the list of scales based on account
       parameters:
         - in: "path"
           name: "account_id"
@@ -478,13 +478,18 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
-  /scale/report:
+  /scale/report/{account_id}:
     get:
       security:
         - Bearer: [ ]
       tags:
         - "scales"
-      summary: To get the report
+      summary: To get the report based on account
+      parameters:
+        - in: "path"
+          name: "account_id"
+          required: true
+          type: string
       responses:
         200:
           description: Scales list

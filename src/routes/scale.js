@@ -23,7 +23,7 @@ router.get(
   scaleController.listAll
 );
 router.get(
-  "/report",
+  "/report/:account_id",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   scaleController.report
 );
