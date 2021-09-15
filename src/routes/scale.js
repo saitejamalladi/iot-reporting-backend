@@ -18,7 +18,7 @@ router.put(
   scaleController.update
 );
 router.get(
-  "/all",
+  "/all/:account_id",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   scaleController.listAll
 );

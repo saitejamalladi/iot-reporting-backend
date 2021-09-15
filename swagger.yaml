@@ -453,6 +453,31 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+  /scale/all/{account_id}:
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To get the list of scales
+      parameters:
+        - in: "path"
+          name: "account_id"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Scales list
+          schema:
+            $ref: "#/definitions/GetScalesResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
   /scale/report:
     get:
       security:

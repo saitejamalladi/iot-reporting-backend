@@ -41,7 +41,7 @@ class ScaleController {
         return;
       }
       let responseObj = await scaleService.listAll(
-        req.tokenInfo[constants.ACCOUNT_ID]
+        req.params["account_id"]
       );
       res.status(responseObj.status_code).json(responseObj);
     } catch (err) {
