@@ -11,22 +11,26 @@ router.post(
   scaleMiddleware.validate(constants.VALIDATIONS.REGISTER),
   scaleController.create
 );
+
 router.put(
   "",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   scaleMiddleware.validate(constants.VALIDATIONS.UPDATE),
   scaleController.update
 );
+
 router.get(
   "/all/:account_id",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   scaleController.listAll
 );
+
 router.get(
   "/report/:account_id",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   scaleController.report
 );
+
 router.get(
   "/list/:device_id",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
@@ -38,22 +42,33 @@ router.delete(
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   scaleController.delete
 );
+
 router.get(
   "/config",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   scaleController.getConfig
 );
+
 router.post(
   "/data",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   scaleMiddleware.validate(constants.VALIDATIONS.ADD_DATA),
   scaleController.addData
 );
+
+router.post(
+  "/data/bulk",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next),
+  scaleMiddleware.validate(constants.VALIDATIONS.BULK_ADD_DATA),
+  scaleController.bulkAddData
+);
+
 router.get(
   "/data/:scale_id",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),
   scaleController.listData
 );
+
 router.delete(
   "/data/:id_scale_data",
   (req, res, next) => authMiddleware.verifyToken(req, res, next),

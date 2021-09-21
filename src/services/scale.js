@@ -37,6 +37,8 @@ class ScaleService {
     };
     return response.handleSuccessResponseWithData("Scale added", resData);
   }
+
+
   async listAll(accountId) {
     // let scales = await Scales.findAll({
     //   where: {
@@ -209,6 +211,10 @@ class ScaleService {
     };
     return response.handleSuccessResponseWithData("Scale Config", resData);
   }
+
+
+
+
   async addData(scaleData) {
     await ScaleData.create({
       scale_id: scaleData["scale_id"],
@@ -224,6 +230,16 @@ class ScaleService {
     });
     return response.handleSuccessResponse("Scale data added");
   }
+  
+  async BulkAddData(scaleData){
+    await scaleData.forEach(element => {
+        // eslint-disable-next-line no-undef
+        addData(element);
+    });
+    return response.handleSuccessResponse("Scale data added");
+  }
+
+
   async listData(scaleId) {
     let scaleData = await ScaleData.findAll({
       where: {

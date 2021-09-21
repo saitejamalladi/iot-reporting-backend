@@ -117,6 +117,21 @@ class ScaleController {
       return next(err);
     }
   }
+
+  async bulkAddData(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json(response.handleValidationError(errors.array()));
+        return;
+      }
+      let responseObj = await scaleService.bulkAddData(req.body.scaleDataArray);
+      res.status(responseObj.status_code).json(responseObj);
+    } catch (err) {
+      return next(err);
+    }
+  }
+
   async listData(req, res, next) {
     try {
       const errors = validationResult(req);
@@ -145,6 +160,7 @@ class ScaleController {
       return next(err);
     }
   }
+
 }
 
 module.exports = new ScaleController();

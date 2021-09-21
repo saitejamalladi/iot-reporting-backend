@@ -33,6 +33,20 @@ class ScaleMiddleware {
           check("service_waste", "Missing service_waste").exists(),
         ];
       }
+      case constants.VALIDATIONS.BULK_ADD_DATA: {
+        return [
+          check("*.scale_id").exists(),
+          check("*.bin_id", "Missing bin_id").exists(),
+          check("*.gross_weight", "Missing gross_weight").isNumeric(),
+          check("*.net_weight", "Missing net_weight").isNumeric(),
+          check("*.service", "Missing service").exists(),
+          check("*.category", "Missing category").exists(),
+          check("*.sub_category1", "Missing sub_category1").exists(),
+          check("*.sub_category2", "Missing sub_category2").exists(),
+          check("*.location", "Missing location").exists(),
+          check("*.service_waste", "Missing service_waste").exists(),
+        ];
+      }
     }
   }
 }
