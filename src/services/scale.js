@@ -215,7 +215,7 @@ class ScaleService {
 
 
 
-  async addData(scaleData) {
+   async addData(scaleData) {
     await ScaleData.create({
       scale_id: scaleData["scale_id"],
       bin_id: scaleData["bin_id"],
@@ -231,10 +231,9 @@ class ScaleService {
     return response.handleSuccessResponse("Scale data added");
   }
   
-  async BulkAddData(scaleData){
+  async bulkAddData(scaleData){
     await scaleData.forEach(element => {
-        // eslint-disable-next-line no-undef
-        addData(element);
+        this.addData(element);
     });
     return response.handleSuccessResponse("Scale data added");
   }

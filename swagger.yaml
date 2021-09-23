@@ -578,6 +578,34 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+  /scale/data/bulk:
+    post:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "scales"
+      summary: To add bulk data to a scale
+      description: The offline app needs to add bulk data to a scale
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "scale data that needs to be created"
+          required: true
+          schema:
+            $ref: "#/definitions/PostBulkAddScaleDataRequest"
+      responses:
+        200:
+          description: Scale data added successfully
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
   /scale/data/{scale_id}:
     get:
       security:
@@ -1199,6 +1227,35 @@ definitions:
         type: string
     xml:
       name: "PostAddScaleDataRequest"
+  PostBulkAddScaleDataRequest:
+    properties:
+      scaleDataArray:
+        type: array
+        items:
+          type: object
+          properties:
+            scale_id:
+              type: string
+            bin_id:
+              type: string
+            gross_weight:
+              type: number
+            net_weight:
+              type: number
+            service:
+              type: string
+            category:
+              type: string
+            sub_category1:
+              type: string
+            sub_category2:
+              type: string
+            location:
+              type: string
+            service_waste:
+              type: string
+    xml:
+      name: "PostBulkAddScaleDataRequest"
   PostAddScaleResponse:
     type: object
     properties:
