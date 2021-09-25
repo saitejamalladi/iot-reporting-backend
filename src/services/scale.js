@@ -89,15 +89,15 @@ class ScaleService {
     return response.handleSuccessResponseWithData("Scales list", scales);
   }
   async report(accountId) {
-    let dailyData = await sequelize.query(
-      "select location, DATE_FORMAT(created_at, '%Y-%m-%d') as report_date, " +
-        "sum(net_weight) as total_weight from scale_data sd " +
-        "where created_at >= DATE(NOW()) - INTERVAL 7 DAY and created_at < DATE(NOW()) " +
-        "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
-        "and device_id in (select device_id from registered_devices rd " +
-        "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
-        "group by location, DATE_FORMAT(created_at, '%Y-%m-%d') " +
-        "order by DATE_FORMAT(created_at, '%Y-%m-%d') ",
+    let locationDailyData = await sequelize.query(
+      "select location as item, DATE_FORMAT(created_at, '%Y-%m-%d') as report_date, " +
+      "sum(net_weight) as total_weight from scale_data sd " +
+      "where created_at >= DATE(NOW()) - INTERVAL 7 DAY and created_at < DATE(NOW()) " +
+      "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+      "and device_id in (select device_id from registered_devices rd " +
+      "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
+      "group by location, DATE_FORMAT(created_at, '%Y-%m-%d') " +
+      "order by DATE_FORMAT(created_at, '%Y-%m-%d') ",
       {
         replacements: {
           account_id: accountId,
@@ -105,8 +105,8 @@ class ScaleService {
         type: sequelize.QueryTypes.SELECT,
       }
     );
-    let Day28Avg = await sequelize.query(
-      "select location, sum(net_weight)/count(1) as average_weight " +
+    let locationDay28Avg = await sequelize.query(
+      "select location as item, sum(net_weight)/count(1) as average_weight " +
         "from scale_data sd where created_at >= DATE(NOW()) - INTERVAL 28 DAY " +
         "and created_at < DATE(NOW()) " +
         "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
@@ -120,8 +120,8 @@ class ScaleService {
         type: sequelize.QueryTypes.SELECT,
       }
     );
-    let Day7Avg = await sequelize.query(
-      "select location, sum(net_weight)/count(1) as average_weight " +
+    let locationDay7Avg = await sequelize.query(
+      "select location as item, sum(net_weight)/count(1) as average_weight " +
         "from scale_data sd where created_at >= DATE(NOW()) - INTERVAL 7 DAY " +
         "and created_at < DATE(NOW()) " +
         "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
@@ -135,10 +135,216 @@ class ScaleService {
         type: sequelize.QueryTypes.SELECT,
       }
     );
+    let productionWasteDailyData = await sequelize.query(
+      "select category as item, DATE_FORMAT(created_at, '%Y-%m-%d') as report_date, " +
+      "sum(net_weight) as total_weight from scale_data sd " +
+      "where created_at >= DATE(NOW()) - INTERVAL 7 DAY and created_at < DATE(NOW()) " +
+      "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+      "and device_id in (select device_id from registered_devices rd " +
+      "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
+      "group by category, DATE_FORMAT(created_at, '%Y-%m-%d') " +
+      "order by DATE_FORMAT(created_at, '%Y-%m-%d') ",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    let productionWasteDay28Avg = await sequelize.query(
+      "select category as item, sum(net_weight)/count(1) as average_weight " +
+      "from scale_data sd where created_at >= DATE(NOW()) - INTERVAL 28 DAY " +
+      "and created_at < DATE(NOW()) " +
+      "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+      "and device_id in (select device_id from registered_devices rd " +
+      "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
+      "group by category",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    let productionWasteDay7Avg = await sequelize.query(
+      "select category as item, sum(net_weight)/count(1) as average_weight " +
+      "from scale_data sd where created_at >= DATE(NOW()) - INTERVAL 7 DAY " +
+      "and created_at < DATE(NOW()) " +
+      "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+      "and device_id in (select device_id from registered_devices rd " +
+      "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
+      "group by category",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    let serviceWasteDailyData = await sequelize.query(
+      "select sub_category1 as item, DATE_FORMAT(created_at, '%Y-%m-%d') as report_date, " +
+      "sum(net_weight) as total_weight from scale_data sd " +
+      "where created_at >= DATE(NOW()) - INTERVAL 7 DAY and created_at < DATE(NOW()) " +
+      "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+      "and device_id in (select device_id from registered_devices rd " +
+      "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
+      "group by sub_category1, DATE_FORMAT(created_at, '%Y-%m-%d') " +
+      "order by DATE_FORMAT(created_at, '%Y-%m-%d') ",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    let serviceWasteDay28Avg = await sequelize.query(
+      "select sub_category1 as item, sum(net_weight)/count(1) as average_weight " +
+      "from scale_data sd where created_at >= DATE(NOW()) - INTERVAL 28 DAY " +
+      "and created_at < DATE(NOW()) " +
+      "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+      "and device_id in (select device_id from registered_devices rd " +
+      "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
+      "group by sub_category1",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    let serviceWasteDay7Avg = await sequelize.query(
+      "select sub_category1 as item, sum(net_weight)/count(1) as average_weight " +
+      "from scale_data sd where created_at >= DATE(NOW()) - INTERVAL 7 DAY " +
+      "and created_at < DATE(NOW()) " +
+      "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+      "and device_id in (select device_id from registered_devices rd " +
+      "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
+      "group by sub_category1",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    let customerWasteDailyData = await sequelize.query(
+      "select sub_category2 as item, DATE_FORMAT(created_at, '%Y-%m-%d') as report_date, " +
+      "sum(net_weight) as total_weight from scale_data sd " +
+      "where created_at >= DATE(NOW()) - INTERVAL 7 DAY and created_at < DATE(NOW()) " +
+      "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+      "and device_id in (select device_id from registered_devices rd " +
+      "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
+      "group by sub_category2, DATE_FORMAT(created_at, '%Y-%m-%d') " +
+      "order by DATE_FORMAT(created_at, '%Y-%m-%d') ",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    let customerWasteDay28Avg = await sequelize.query(
+      "select sub_category2 as item, sum(net_weight)/count(1) as average_weight " +
+      "from scale_data sd where created_at >= DATE(NOW()) - INTERVAL 28 DAY " +
+      "and created_at < DATE(NOW()) " +
+      "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+      "and device_id in (select device_id from registered_devices rd " +
+      "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
+      "group by sub_category2",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    let customerWasteDay7Avg = await sequelize.query(
+      "select sub_category2 as item, sum(net_weight)/count(1) as average_weight " +
+      "from scale_data sd where created_at >= DATE(NOW()) - INTERVAL 7 DAY " +
+      "and created_at < DATE(NOW()) " +
+      "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+      "and device_id in (select device_id from registered_devices rd " +
+      "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
+      "group by sub_category2",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    let wasteTypeDailyData = await sequelize.query(
+      "select service_waste as item, DATE_FORMAT(created_at, '%Y-%m-%d') as report_date, " +
+      "sum(net_weight) as total_weight from scale_data sd " +
+      "where created_at >= DATE(NOW()) - INTERVAL 7 DAY and created_at < DATE(NOW()) " +
+      "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+      "and device_id in (select device_id from registered_devices rd " +
+      "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
+      "group by service_waste, DATE_FORMAT(created_at, '%Y-%m-%d') " +
+      "order by DATE_FORMAT(created_at, '%Y-%m-%d') ",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    let wasteTypeDay28Avg = await sequelize.query(
+      "select service_waste as item, sum(net_weight)/count(1) as average_weight " +
+      "from scale_data sd where created_at >= DATE(NOW()) - INTERVAL 28 DAY " +
+      "and created_at < DATE(NOW()) " +
+      "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+      "and device_id in (select device_id from registered_devices rd " +
+      "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
+      "group by service_waste",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    let wasteTypeDay7Avg = await sequelize.query(
+      "select service_waste as item, sum(net_weight)/count(1) as average_weight " +
+      "from scale_data sd where created_at >= DATE(NOW()) - INTERVAL 7 DAY " +
+      "and created_at < DATE(NOW()) " +
+      "and scale_id in (select scale_id from scales s where scale_id = sd.scale_id " +
+      "and device_id in (select device_id from registered_devices rd " +
+      "where rd.device_id = s.device_id and rd.account_id = :account_id)) " +
+      "group by service_waste",
+      {
+        replacements: {
+          account_id: accountId,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
     let resData = {
-      daily_data: dailyData,
-      day_28_avg: Day28Avg,
-      day_7_avg: Day7Avg,
+      location: {
+        daily_data: locationDailyData,
+        day_28_avg: locationDay28Avg,
+        day_7_avg: locationDay7Avg,
+      },
+      productionWaste: {
+        daily_data: productionWasteDailyData,
+        day_28_avg: productionWasteDay28Avg,
+        day_7_avg: productionWasteDay7Avg,
+      },
+      serviceWaste: {
+        daily_data: serviceWasteDailyData,
+        day_28_avg: serviceWasteDay28Avg,
+        day_7_avg: serviceWasteDay7Avg,
+      },
+      customerWaste: {
+        daily_data: customerWasteDailyData,
+        day_28_avg: customerWasteDay28Avg,
+        day_7_avg: customerWasteDay7Avg,
+      },
+      wasteType: {
+        daily_data: wasteTypeDailyData,
+        day_28_avg: wasteTypeDay28Avg,
+        day_7_avg: wasteTypeDay7Avg,
+      },
     };
     return response.handleSuccessResponseWithData("Report", resData);
   }
