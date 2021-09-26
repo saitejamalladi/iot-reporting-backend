@@ -29,6 +29,8 @@ tags:
     description: "Access to device data"
   - name: "scales"
     description: "Access to scales data"
+  - name: "meal-count"
+    description: "Access to Meal Count data"
   - name: "bins"
     description: "Access to bins data"
 
@@ -691,6 +693,126 @@ paths:
           description: Invalid credentials
           schema:
             $ref: "#/definitions/GenericResponse"
+  /meal-count/:
+    post:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "meal-count"
+      summary: To add a meal count
+      description: This API adds the meal count
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "meal count object that needs to be created"
+          required: true
+          schema:
+            $ref: "#/definitions/PostAddMealCountRequest"
+      responses:
+        200:
+          description: Scale added successfully
+          schema:
+            $ref: "#/definitions/PostAddMealCountResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "meal-count"
+      summary: To get the list of meal count data
+      responses:
+        200:
+          description: Scales list
+          schema:
+            $ref: "#/definitions/GetMealCountResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /meal-count/{meal_count_id}:
+    delete:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "meal-count"
+      summary: To delete a meal count based on meal_count_id
+      parameters:
+        - in: "path"
+          name: "meal_count_id"
+          description: "The meal_count_id to be deleted"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Meal Count removed
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+  /meal-count/benchmark:
+    put:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "meal-count"
+      summary: To update
+      description: This API adds the meal count
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "meal count object that needs to be created"
+          required: true
+          schema:
+            $ref: "#/definitions/PutBenchmarkRequest"
+      responses:
+        200:
+          description: Bench mark updated successfully
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
+    get:
+      security:
+        - Bearer: [ ]
+      tags:
+        - "meal-count"
+      summary: To get the list of benchmark data
+      responses:
+        200:
+          description: Benchmark Data
+          schema:
+            $ref: "#/definitions/GetBenchmarkResponse"
+        400:
+          description: Something wrong in the body.
+          schema:
+            $ref: "#/definitions/GenericResponse"
+        401:
+          description: Invalid credentials
+          schema:
+            $ref: "#/definitions/GenericResponse"
 
 definitions:
   GenericResponse:
@@ -1314,3 +1436,124 @@ definitions:
               type: string
     xml:
       name: "ListPermissionsResponse"
+  PostAddMealCountRequest:
+    type: array
+    items:
+      type: object
+      properties:
+        meal_count_type:
+          type: string
+          example: guest
+        total_count:
+          type: number
+          example: 100
+        service:
+          type: string
+          example: Function
+        location:
+          type: string
+          example: Sai`s Kitchen
+        modified_by:
+          type: string
+          example: Sai Teja Malladi
+        report_date:
+          type: string
+          example: 2021-09-25
+    xml:
+      name: "PostAddMealCountRequest"
+  PostAddMealCountResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: object
+        properties:
+          meal_count_id:
+            type: string
+    xml:
+      name: "PostAddMealCountResponse"
+  GetMealCountResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            meal_count_id:
+              type: string
+            meal_count_type:
+              type: string
+            total_count:
+              type: number
+            account_id:
+              type: string
+            service:
+              type: string
+            report_date:
+              type: string
+            modified_by:
+              type: string
+            created_at:
+              type: string
+            updated_at:
+              type: string
+    xml:
+      name: "GetMealCountResponse"
+  PutBenchmarkRequest:
+    type: object
+    required:
+      - benchmark
+      - category
+      - service
+      - account_id
+    properties:
+      benchmark:
+        type: number
+      account_id:
+        type: string
+      category:
+        type: string
+      service:
+        type: string
+    xml:
+      name: "PutBenchmarkRequest"
+  GetBenchmarkResponse:
+    type: object
+    properties:
+      is_error:
+        type: boolean
+      status_code:
+        type: integer
+      display_msg:
+        type: string
+      res_data:
+        type: array
+        items:
+          type: object
+          properties:
+            account_id:
+              type: string
+            category:
+              type: string
+            benchmark:
+              type: number
+            service:
+              type: string
+            created_at:
+              type: string
+            updated_at:
+              type: string
+    xml:
+      name: "GetBenchmarkResponse"
