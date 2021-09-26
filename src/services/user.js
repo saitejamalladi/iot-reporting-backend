@@ -1,4 +1,3 @@
-const Accounts = require("../models/users").Accounts;
 const Users = require("../models/users").Users;
 const Companies = require("../models/users").Companies;
 const Permissions = require("../models/users").Permissions;

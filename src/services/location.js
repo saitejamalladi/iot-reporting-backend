@@ -20,8 +20,6 @@ class LocationService {
   };
   
   async list(accountId) {
-    console.log(accountId);
-    console.log(Locations);
     const locations = await Locations.findAll({
       where: {
         account_id: accountId,
